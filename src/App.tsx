@@ -20,7 +20,7 @@ const App: React.FC = () => {
         <br />
         <Link to="/admin">Admin Page</Link>
         <br />
-        <Link to="/user">User page</Link>
+        <Link to="/buyer">Buyer page</Link>
         <br />
         <Link to="/seller">Seller Page</Link>
 

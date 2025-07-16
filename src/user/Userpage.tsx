@@ -4,11 +4,14 @@ import { Link } from "react-router-dom";
 interface SearchBarProps {
   onSearch?: (query: string) => void;
   placeholder?: string;
+ role: 'admin' | 'seller' | 'buyer';
 }
 
 const User: React.FC<SearchBarProps> = ({
   onSearch = () => {},
   placeholder = "ค้นหาสินค้าที่ต้องการ ...",
+  role,
+
 }) => {
   const [query, setQuery] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -37,8 +40,45 @@ const User: React.FC<SearchBarProps> = ({
         </li>
       </nav>
 
-      <h1>Welcome to Store</h1>
+      <h1>Welcome {role.toUpperCase()} to Store</h1>
+      {role === 'admin' && (
+  <div>
+    <h1>📊 Admin Dashboard</h1>
+    <h3>ดูข้อมูลทั้งหมด / จัดการระบบ</h3>
+     <div>
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={query}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          ref={inputRef}
+        />
+        <button onClick={handleSearchClick}>Search</button>
+      </div>
       <div>
+        <table>
+          <thead>
+            <tr>
+              <th>รายการสินค้า</th>
+              <th>จำหน่ายโดย</th>
+              <th>วันที่วางจำหน่าย</th>
+              <th>ประเภทสินค้า</th>
+              <th>ราคา</th>
+              <th>การจัดการ</th>
+
+            </tr>
+          </thead>
+        </table>
+      </div>
+  </div>
+)}
+
+{role === 'seller' && (
+  <div>
+    <h1>📦 Seller Panel</h1>
+    <h2>จัดการสินค้าของคุณ / ดูออเดอร์</h2>
+     <div>
         <input
           type="text"
           placeholder={placeholder}
@@ -57,10 +97,47 @@ const User: React.FC<SearchBarProps> = ({
               <th>วันที่วางจำหน่าย</th>
               <th>ประเภทสินค้า</th>
               <th>ราคา</th>
+              <th>เพิ่มรายการสินค้า</th>
+              <th>การจัดการ</th>
             </tr>
           </thead>
         </table>
       </div>
+  </div>
+)}
+
+{role === 'buyer' && (
+  <div>
+    <h1>🛒 Buyer View</h1>
+    <h2>เลือกซื้อสินค้า / ดูโปรโมชั่น</h2>
+     <div>
+        <input
+          type="text"
+          placeholder={placeholder}
+          value={query}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          ref={inputRef}
+        />
+        <button onClick={handleSearchClick}>Search</button>
+      </div>
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>รายการสินค้า</th>
+              <th>วันที่วางจำหน่าย</th>
+              <th>จำหน่ายโดย</th>
+              <th>ประเภทสินค้า</th>
+              <th>ราคา</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+  </div>
+)}
+     
     </>
   );
 };
