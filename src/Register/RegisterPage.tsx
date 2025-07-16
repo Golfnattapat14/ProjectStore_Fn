@@ -1,42 +1,95 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import viteLogo from "/vite.svg";
 
 const Register: React.FC = () => {
-const Role = ["","Buyer", "Seller", "Admin"] as const;
+  const Role = ["Buyer", "Seller", "Admin"] as const;
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+    role: Role[0],
+  });
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Password not macth");
+      return;
+    }
+    console.log("Registed o/");
+    alert("Register Success");
+  };
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
+        <a href="../">
+          <button>Home</button>
         </a>
       </div>
+      <br />
       <div className="container min-vh-100 ">
         <div className="row min-vh-100 justify-content-center align-items-center">
-          <form className="col-lg-3 col-sm-4 col-8 mx-auto">
+          <form
+            className="col-lg-3 col-sm-4 col-8 mx-auto"
+            onSubmit={handleSubmit}
+          >
             <div className="form-group">
               <label className="w-100">
                 Username :
-                <input type="text" className="form-control" />
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
               </label>
             </div>
             <div className="form-group">
               <label className="w-100">
                 Password :
-                <input type="password" className="form-control" />
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
               </label>
             </div>
             <div className="form-group">
               <label className="w-100">
                 Confirm Password :
-                <input type="password" className="form-control" />
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className="form-control"
+                  required
+                />
               </label>
             </div>
 
             <div className="form-group">
               <label className="w-100">
                 Role:
-                <select className="form-control">
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  className="form-control"
+                >
                   {Role.map((role) => (
                     <option key={role} value={role}>
                       {role}
@@ -59,5 +112,4 @@ const Role = ["","Buyer", "Seller", "Admin"] as const;
     </>
   );
 };
-
 export default Register;
