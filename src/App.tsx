@@ -18,11 +18,11 @@ const App: React.FC = () => {
         <br />
         <Link to="/register">Sign up</Link>
         <br />
-        <Link to="/admin">Admin Page</Link>
+        {/* <Link to="/admin">Admin Page</Link>
         <br />
         <Link to="/buyer">Buyer page</Link>
         <br />
-        <Link to="/seller">Seller Page</Link>
+        <Link to="/seller">Seller Page</Link> */}
 
       </div>
     </>

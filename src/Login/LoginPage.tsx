@@ -1,18 +1,17 @@
 import { Link } from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export interface ILoginState{
-  username : string;
-  password : string;
-  [key : string]:ILoginState[keyof ILoginState];
+export interface ILoginState {
+  username: string;
+  password: string;
+  [key: string]: ILoginState[keyof ILoginState];
 }
-  
-  
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
 
-
-    const [formData, setFormData] = useState<ILoginState>({
+  const [formData, setFormData] = useState<ILoginState>({
     username: "",
     password: "",
   });
@@ -24,10 +23,41 @@ const Login: React.FC = () => {
       [name]: value,
     }));
   };
-  
-    const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Registering with:", formData);
+
+    const savedUserJSON = localStorage.getItem("registeredUser");
+    if (!savedUserJSON) {
+      alert("No user registered. Please register first.");
+      return;
+    }
+
+    const savedUser = JSON.parse(savedUserJSON);
+    if (
+      formData.username === savedUser.username &&
+      formData.password === savedUser.password
+    ) {
+      alert("Login success!");
+
+      localStorage.setItem("loggedInUser", JSON.stringify(savedUser));
+      switch (savedUser.role.toLowerCase()) {
+        case "admin":
+          navigate("/admin");
+          break;
+        case "seller":
+          navigate("/seller");
+          break;
+        case "buyer":
+          navigate("/buyer");
+          break;
+        default:
+          navigate("/");
+          break;
+      }
+    } else {
+      alert("Invalid username or password.");
+    }
   };
 
   return (
@@ -36,10 +66,14 @@ const Login: React.FC = () => {
         <a href="../">
           <button>Home</button>
         </a>
-      </div><br />
+      </div>
+      <br />
       <div className="container min-vh-100">
         <div className="row min-vh-100 justify-content-center align-items-center">
-          <form className="col-lg-3 col-sm-4 col-8 mx-auto" onSubmit={handleSubmit}>
+          <form
+            className="col-lg-3 col-sm-4 col-8 mx-auto"
+            onSubmit={handleSubmit}
+          >
             <div className="form-group">
               <label className="w-100">
                 Username:
@@ -53,7 +87,7 @@ const Login: React.FC = () => {
               </label>
             </div>
             <div className="form-group">
-               <label className="w-100">
+              <label className="w-100">
                 Password:
                 <input
                   type="password"
@@ -64,7 +98,11 @@ const Login: React.FC = () => {
                 />
               </label>
             </div>
-            <button type="submit" className="btn btn-primary" onSubmit={handleSubmit}>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              onSubmit={handleSubmit}
+            >
               Sign in
             </button>
           </form>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 interface SearchBarProps {
   onSearch?: (query: string) => void;
   placeholder?: string;
-  role: "admin" | "seller" | "buyer";
+  role: "Admin" | "Seller" | "Buyer";
 }
 
 const User: React.FC<SearchBarProps> = ({
@@ -40,7 +40,7 @@ const User: React.FC<SearchBarProps> = ({
       </nav>
 
       <h1>Welcome {role.toUpperCase()} to Store</h1>
-      {role === "admin" && (
+      {role === "Admin" && (
         <div>
           <h1>📊 Admin Dashboard</h1>
           <h3>ดูข้อมูลทั้งหมด / จัดการระบบ</h3>
@@ -72,7 +72,7 @@ const User: React.FC<SearchBarProps> = ({
         </div>
       )}
 
-      {role === "seller" && (
+      {role === "Seller" && (
         <div>
           <h1>📦 Seller Panel</h1>
           <h2>จัดการสินค้าของคุณ / ดูออเดอร์</h2>
@@ -104,7 +104,7 @@ const User: React.FC<SearchBarProps> = ({
         </div>
       )}
 
-      {role === "buyer" && (
+      {role === "Buyer" && (
         <div>
           <h1>🛒 Store Shop</h1>
           <h2>เลือกซื้อสินค้า / ดูโปรโมชั่น</h2>

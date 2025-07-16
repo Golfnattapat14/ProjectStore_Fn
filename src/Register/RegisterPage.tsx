@@ -1,9 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+
+type RoleType = "Buyer" | "Seller" | "Admin";
+
+interface FormData {
+  username: string;
+  password: string;
+  confirmPassword: string;
+  role: RoleType;
+}
+
 const Register: React.FC = () => {
   const Role = ["Buyer", "Seller", "Admin"] as const;
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
     confirmPassword: "",
@@ -19,6 +29,11 @@ const Register: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+
+    //เก็บไว้ใน local ก่อนนนนน
+  localStorage.setItem("registeredUser", JSON.stringify(formData));
+
 
     if (formData.password !== formData.confirmPassword) {
       alert("Password not macth");
