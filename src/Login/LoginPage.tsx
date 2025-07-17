@@ -24,41 +24,48 @@ const Login: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    const savedUserJSON = localStorage.getItem("registeredUser");
-    if (!savedUserJSON) {
-      alert("No user registered. Please register first.");
+  try {
+    const response = await fetch("https://localhost:44355/api/Users/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      alert(`Login failed: ${errorData.message || response.statusText}`);
       return;
     }
 
-    const savedUser = JSON.parse(savedUserJSON);
-    if (
-      formData.username === savedUser.username &&
-      formData.password === savedUser.password
-    ) {
-      alert("Login success!");
+    const data = await response.json();
 
-      localStorage.setItem("loggedInUser", JSON.stringify(savedUser));
-      switch (savedUser.role.toLowerCase()) {
-        case "admin":
-          navigate("/admin");
-          break;
-        case "seller":
-          navigate("/seller");
-          break;
-        case "buyer":
-          navigate("/buyer");
-          break;
-        default:
-          navigate("/");
-          break;
-      }
-    } else {
-      alert("Invalid username or password.");
+    alert("Login success!");
+
+    switch (data.role) {
+      case "admin":
+        navigate("/admin/dashboard");
+        break;
+      case "buyer":
+        navigate("/buyer");
+        break;
+      case "seller":
+        navigate("/seller");
+        break;
+      default:
+        navigate("/");
+        break;
     }
-  };
+
+  } catch (error) {
+    alert("Login error: " + (error instanceof Error ? error.message : String(error)));
+  }
+};
+
 
   return (
     <>
