@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 type RoleType = "Buyer" | "Seller" | "Admin";
@@ -12,6 +13,7 @@ interface FormData {
 }
 
 const Register: React.FC = () => {
+    const navigate = useNavigate();
   const Role = ["Buyer", "Seller", "Admin"] as const;
   const [formData, setFormData] = useState<FormData>({
     username: "",
@@ -27,21 +29,49 @@ const Register: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-
-    //เก็บไว้ใน local ก่อนนนนน
-  localStorage.setItem("registeredUser", JSON.stringify(formData));
-
-
     if (formData.password !== formData.confirmPassword) {
-      alert("Password not macth");
+      alert("Password not match");
       return;
     }
-    console.log("Registed o/");
-    alert("Register Success");
+
+    const dataToSend = {
+      username: formData.username,
+      password: formData.password,
+      role: formData.role,
+    };
+
+    try {
+      const response = await fetch(
+        "https://localhost:44355/api/users/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(`Register failed: ${errorData.message || response.statusText}`);
+        return;
+      }
+
+      const result = await response.json();
+      alert("Register Success! User ID: " + result.id);
+
+      navigate("/login");
+    } catch (error) {
+      alert(
+        "Register error: " + (error instanceof Error ? error.message : String(error))
+      );
+    }
   };
+
   return (
     <>
       <div>
