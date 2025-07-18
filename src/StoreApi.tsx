@@ -1,53 +1,60 @@
-// export interface User {
-//   id: string;
-//   username: string;
-//   password: string;
-//   createDate: string;  
-//   createBy: string;
-//   updateDate?: string | null;
-//   updateBy?: string | null;
-//   isDeleted: boolean;
-//   token?: string | null;
-//   tokenExpiredDate?: string | null;
-// //   userCarts?: UserCart[];
-// //   userOrders?: UserOrder[];
-// }
+export interface RegisterRequest {
+  username: string;
+  password: string;
+  role: "Buyer" | "Seller" | "Admin";
+}
+export interface ILoginState {
+  username: string;
+  password: string;
+}
 
-// const BASE_API_URL = "https://localhost:44355/api/";
+export interface LoginResponse {
+  id: string;
+  username: string;
+  token: string;
+  role: "Admin" | "Buyer" | "Seller";
+}
 
-// export async function PostNewUser(dataToAdd: User) {
-//   try {
-//     const url = BASE_API_URL + "Users/register"; 
-//     const response = await fetch(url, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(dataToAdd),
-//     });
+const BASE_API_URL = "https://localhost:44355/api/";
 
-//     if (!response.ok) {
-//       let errorMessage = `${response.statusText}`;
-//       try {
-//         const errorData = await response.json();
-//         if (errorData && errorData.message) {
-//           errorMessage += `: ${errorData.message}`;
-//         }
-//       } catch {
-//         const errorText = await response.text();
-//         if (errorText) {
-//           errorMessage += `: ${errorText}`;
-//         }
-//       }
-//       throw new Error(errorMessage);
-//     }
+export async function registerUser(data: RegisterRequest) {
+  try {
+    const response = await fetch(BASE_API_URL + "users/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-//     const data = await response.json();
-//     return data;
-//   } catch (error) {
-//     if (error instanceof Error) {
-//       return { error: error.message };
-//     }
-//     return { error: String(error) };
-//   }
-// }
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Register failed");
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error("Register error: " + error.message);
+    }
+    throw new Error("Unknown error");
+  }
+}
+
+export async function loginUser(
+  credentials: ILoginState
+): Promise<LoginResponse> {
+  const response = await fetch(BASE_API_URL + "users/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(credentials),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Login failed");
+  }
+
+  return await response.json();
+}

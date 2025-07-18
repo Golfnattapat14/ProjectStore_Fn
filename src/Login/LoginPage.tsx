@@ -1,11 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-
-export interface ILoginState {
-  username: string;
-  password: string;
-  [key: string]: ILoginState[keyof ILoginState];
-}
+import { loginUser, type ILoginState } from "../StoreApi";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +12,7 @@ const Login: React.FC = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
-    setFormData((prevState) => ({
+    setFormData((prevState: ILoginState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -25,33 +20,14 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      const response = await fetch("https://localhost:44355/api/Users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert(`Login failed: ${errorData.message || response.statusText}`);
-        return;
-      }
-
-      const data = await response.json();
-
-      const role = data.role.toLowerCase();
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", role);
-      localStorage.setItem("username", data.username);
+      const result = await loginUser(formData);
+      localStorage.setItem("token", result.token);
+      localStorage.setItem("username", result.username);
+      localStorage.setItem("role", result.role.toLowerCase());
 
       alert("Login success!");
-
-      switch (role) {
+      switch (result.role.toLowerCase()) {
         case "admin":
           navigate("/admin");
           break;
@@ -65,11 +41,8 @@ const Login: React.FC = () => {
           navigate("/");
           break;
       }
-    } catch (error) {
-      alert(
-        "Login error: " +
-          (error instanceof Error ? error.message : String(error))
-      );
+    } catch (error: unknown) {
+      alert(error instanceof Error ? error.message : "Login error occurred.");
     }
   };
 

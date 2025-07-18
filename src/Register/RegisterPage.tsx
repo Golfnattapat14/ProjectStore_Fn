@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { registerUser } from "../StoreApi";
 
 type RoleType = "Buyer" | "Seller" | "Admin";
 
@@ -13,13 +13,16 @@ interface FormData {
 }
 
 const Register: React.FC = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const Role = ["Buyer", "Seller", "Admin"] as const;
+  const hideRole = ["Admin"];
+  const visibleRole = Role.filter((role) => !hideRole.includes(role));
+
   const [formData, setFormData] = useState<FormData>({
     username: "",
     password: "",
     confirmPassword: "",
-    role: Role[0],
+    role: visibleRole[0],
   });
 
   const handleChange = (
@@ -44,31 +47,15 @@ const Register: React.FC = () => {
     };
 
     try {
-      const response = await fetch(
-        "https://localhost:44355/api/users/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataToSend),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        alert(`Register failed: ${errorData.message || response.statusText}`);
-        return;
-      }
-
-      const result = await response.json();
+      const result = await registerUser(dataToSend);
       alert("Register Success! User ID: " + result.id);
-
       navigate("/login");
-    } catch (error) {
-      alert(
-        "Register error: " + (error instanceof Error ? error.message : String(error))
-      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("Unexpected error occurred.");
+      }
     }
   };
 
@@ -135,7 +122,7 @@ const Register: React.FC = () => {
                   onChange={handleChange}
                   className="form-control"
                 >
-                  {Role.map((role) => (
+                  {visibleRole.map((role) => (
                     <option key={role} value={role}>
                       {role}
                     </option>
