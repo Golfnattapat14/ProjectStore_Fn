@@ -36,6 +36,8 @@ const User: React.FC<SearchBarProps> = ({
         return "เครื่องใช้";
       case 2:
         return "เครื่องดื่ม";
+      case 3:
+        return "ของเล่น";
       default:
         return "อื่น ๆ";
     }
@@ -79,7 +81,6 @@ const User: React.FC<SearchBarProps> = ({
     try {
       setMessage("กำลังเพิ่มสินค้า...");
       if (!newProduct.ProductName || newProduct.ProductType === undefined) {
-        ///แก้ตรงนี้นะ
         setMessage("กรุณากรอกชื่อสินค้าและประเภทสินค้า");
         return;
       }
@@ -93,7 +94,7 @@ const User: React.FC<SearchBarProps> = ({
       }
 
       const added = await addNewProduct(newProduct as ProductRequest);
-      setMessage(`เพิ่มสินค้าเรียบร้อย: ${added.ProductName}`);
+      setMessage(`เพิ่มสินค้าเรียบร้อย: ${added.productName}`);
       setNewProduct({
         ProductName: "",
         ProductPrice: 0,
@@ -111,6 +112,13 @@ const User: React.FC<SearchBarProps> = ({
     }
   };
 
+  function handleToggleChange(id: string) {
+    setProducts((prev) =>
+      prev.map((p) => (p.Id === id ? { ...p, isActive: !p.isActive } : p))
+    );
+  }
+
+  
   return (
     <>
       <nav>
@@ -142,7 +150,8 @@ const User: React.FC<SearchBarProps> = ({
             <table>
               <thead>
                 <tr>
-                  <th>รายการสินค้า</th>
+                  <th>รายการที่</th>
+                  <th>สินค้า</th>
                   <th>จำหน่ายโดย</th>
                   <th>วันที่วางจำหน่าย</th>
                   <th>ประเภทสินค้า</th>
@@ -150,6 +159,28 @@ const User: React.FC<SearchBarProps> = ({
                   <th>การจัดการ</th>
                 </tr>
               </thead>
+              <tbody>
+                {products.map((p, index) => (
+                  <tr key={p.Id}>
+                    <td>{index + 1}</td>
+                    <td>{p.productName}</td>
+                    <td>{p.createBy}</td>
+                    <td>{new Date(p.createDate).toLocaleDateString()}</td>
+                    <td>{getProductTypeName(p.productType ?? 0)}</td>
+                    <td>{p.productPrice} บาท</td>
+                    <td>
+                      <label className="toggle-switch">
+                        <input
+                          type="checkbox"
+                          checked={p.isActive ?? false}
+                          onChange={() => handleToggleChange(p.Id)}
+                        />
+                        <span className="slider round"></span>
+                      </label>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </div>
@@ -231,21 +262,24 @@ const User: React.FC<SearchBarProps> = ({
             <table>
               <thead>
                 <tr>
-                  <th>รายการสินค้า</th>
+                  <th>รายการที่</th>
+                  <th>สินค้า</th>
                   <th>วันที่วางจำหน่าย</th>
                   <th>ประเภทสินค้า</th>
                   <th>ราคา</th>
-                  <th>จำนวนสินค้า</th> <th>การจัดการ</th>
+                  <th>จำนวนสินค้า</th>
+                  <th>การจัดการ</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((p) => (
+                {products.map((p, index) => (
                   <tr key={p.Id}>
-                    <td>{p.ProductName}</td>
-                    <td>{new Date(p.CreateDate).toLocaleDateString()}</td>
-                    <td>{getProductTypeName(p.ProductType ?? 0)}</td>{" "}
-                    <td>{p.ProductPrice} บาท</td>
-                    <td>{p.Quantity}</td>
+                    <td>{index + 1}</td>
+                    <td>{p.productName}</td>
+                    <td>{new Date(p.createDate).toLocaleDateString()}</td>
+                    <td>{getProductTypeName(p.productType ?? 0)}</td>{" "}
+                    <td>{p.productPrice} บาท</td>
+                    <td>{p.quantity}</td>
                     <td>
                       <button>แก้ไข</button>
                       <button>ลบ</button>
@@ -277,23 +311,26 @@ const User: React.FC<SearchBarProps> = ({
             <table>
               <thead>
                 <tr>
-                  <th>รายการสินค้า</th>
+                  <th>รายการที่</th>
                   <th>ชื่อสินค้า</th>
                   <th>วันที่วางจำหน่าย</th>
                   <th>จำหน่ายโดย</th>
                   <th>ประเภทสินค้า</th>
+                  <th>สินค้าคงเหลือ</th>
                   <th>ราคา</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {products.map((p) => (
-                  <tr key={p.Id ?? p.ProductName}>
-                    <td>{p.ProductName}</td>
-                    <td>{new Date(p.CreateDate).toLocaleDateString()}</td>
-                    <td>{p.CreateBy}</td>
-                    <td>{getProductTypeName(p.ProductType ?? 0)}</td>
-                    <td>{p.ProductPrice} บาท</td>
+                {products.map((p, index) => (
+                  <tr key={p.Id ?? `${p.productName}-${index}`}>
+                    <td>{index + 1}</td>
+                    <td>{p.productName}</td>
+                    <td>{new Date(p.createDate).toLocaleDateString()}</td>
+                    <td>{p.createBy}</td>
+                    <td>{getProductTypeName(p.productType ?? 0)}</td>
+                    <td>{p.quantity}</td>
+                    <td>{p.productPrice} บาท</td>
                     <td>
                       <button>เพิ่มใส่ตะกร้า</button>
                     </td>

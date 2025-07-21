@@ -17,15 +17,15 @@ export interface LoginResponse {
 
 export interface ProductResponse {
   Id: string;
-  ProductName: string;
-  ProductPrice: number;
-  ProductType?: number;
-  Quantity: number;
-  CreateDate: string;
-  CreateBy: string;
-  UpdateDate?: string;
-  UpdateBy?: string;
-  IsActive?: boolean;
+  productName: string;
+  productPrice: number;
+  productType?: number;
+  quantity: number;
+  createDate: string;
+  createBy: string;
+  updateDate?: string;
+  updateBy?: string;
+  isActive?: boolean;
 }
 
 export interface ProductRequest {
@@ -111,6 +111,27 @@ export async function getProducts(): Promise<ProductResponse[]> {
   }
 
   return await response.json();
+}
+
+export async function updateProduct(id: string, data: {
+  ProductName: string;
+  ProductPrice: number;
+  ProductType: number;
+  Quantity: number;
+  IsActive: boolean;
+}): Promise<ProductResponse> {
+  const response = await fetch(`/api/products/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("ไม่สามารถอัปเดตข้อมูลสินค้าได้");
+  }
+  return response.json();
 }
 
 

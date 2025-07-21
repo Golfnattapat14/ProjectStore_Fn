@@ -12,7 +12,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100vh;
-  color: #222222; /* สีข้อความเข้มชัด */
+  color: #222222; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,7 +29,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: #222222; /* สีข้อความใน container */
+  color: #222222;
 }
 
 h2 {
@@ -61,12 +61,12 @@ input.form-control {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   outline: none;
   font-weight: 500;
-  background-color: #fff; /* สีพื้น input ขาว */
-  color: #222222; /* สีตัวหนังสือใน input */
+  background-color: #fff; 
+  color: #222222; 
 }
 
 input.form-control::placeholder {
-  color: #999999; /* สี placeholder */
+  color: #999999; 
 }
 
 input.form-control:focus {
@@ -81,7 +81,7 @@ button.btn.btn-primary {
   background-color: #0052cc;
   border: none;
   border-radius: 12px;
-  color: white; /* สีข้อความปุ่ม */
+  color: white;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
