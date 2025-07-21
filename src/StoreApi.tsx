@@ -15,6 +15,31 @@ export interface LoginResponse {
   role: "Admin" | "Buyer" | "Seller";
 }
 
+export interface ProductResponse {
+  Id: string;
+  ProductName: string;
+  ProductPrice: number;
+  ProductType?: number;
+  Quantity: number;
+  CreateDate: string;
+  CreateBy: string;
+  UpdateDate?: string;
+  UpdateBy?: string;
+  IsActive?: boolean;
+}
+
+export interface ProductRequest {
+  ProductName: string;
+  ProductPrice: number;
+  ProductType: number;
+  Quantity: number;
+  CreateBy: string;
+  IsActive?: boolean;
+}
+
+
+
+
 const BASE_API_URL = "https://localhost:44355/api/";
 
 export async function registerUser(data: RegisterRequest) {
@@ -42,9 +67,7 @@ export async function registerUser(data: RegisterRequest) {
   }
 }
 
-export async function loginUser(
-  credentials: ILoginState
-): Promise<LoginResponse> {
+export async function loginUser( credentials: ILoginState): Promise<LoginResponse> {
   const response = await fetch(BASE_API_URL + "users/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -58,3 +81,39 @@ export async function loginUser(
 
   return await response.json();
 }
+
+export async function addNewProduct(product: ProductRequest): Promise<ProductResponse> {
+  const response = await fetch(BASE_API_URL + "users/New-Product", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(product),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "ไม่สามารถเพิ่มสินค้าได้");
+  }
+
+  return await response.json();
+}
+
+export async function getProducts(): Promise<ProductResponse[]> {
+  const response = await fetch(BASE_API_URL + "users/products", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "ไม่สามารถดึงข้อมูลสินค้าได้");
+  }
+
+  return await response.json();
+}
+
+
+
+
+

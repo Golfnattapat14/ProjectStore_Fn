@@ -1,0 +1,141 @@
+/* Login.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif, Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #272727 0%, #2d2d2d 100%);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  color: #222222; /* สีข้อความเข้มชัด */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container.min-vh-100 {
+  background-color: white;
+  border-radius: 12px;
+  padding: 40px 30px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 400px;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #222222; /* สีข้อความใน container */
+}
+
+h2 {
+  text-align: center;
+  color: #0052cc;
+  margin-bottom: 30px;
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+label.w-100 {
+  display: block;
+  font-weight: 600;
+  font-size: 15px;
+  color: #222222;
+  margin-bottom: 8px;
+}
+
+input.form-control {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+  font-weight: 500;
+  background-color: #fff; /* สีพื้น input ขาว */
+  color: #222222; /* สีตัวหนังสือใน input */
+}
+
+input.form-control::placeholder {
+  color: #999999; /* สี placeholder */
+}
+
+input.form-control:focus {
+  border-color: #0052cc;
+  box-shadow: 0 0 8px rgba(0, 82, 204, 0.3);
+  background-color: #fff;
+}
+
+button.btn.btn-primary {
+  width: 100%;
+  padding: 16px 0;
+  background-color: #0052cc;
+  border: none;
+  border-radius: 12px;
+  color: white; /* สีข้อความปุ่ม */
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 82, 204, 0.4);
+}
+
+button.btn.btn-primary:hover {
+  background-color: #003d99;
+  box-shadow: 0 6px 18px rgba(0, 61, 153, 0.6);
+  color: white;
+}
+
+div > a > button {
+  background-color: transparent;
+  border: 2px solid #0052cc;
+  color: #0052cc;
+  padding: 10px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+div > a > button:hover {
+  background-color: #0052cc;
+  color: white;
+}
+
+.read-the-docs {
+  display: block;
+  margin-top: 25px;
+  text-align: center;
+  color: #0052cc;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.read-the-docs:hover {
+  color: #003d99;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .container.min-vh-100 {
+    padding: 30px 20px;
+    min-height: auto;
+  }
+
+  button.btn.btn-primary {
+    font-size: 16px;
+  }
+}

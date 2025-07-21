@@ -1,5 +1,8 @@
-import React, { useState, useRef, type ChangeEvent } from "react";
+import React, { useState, useRef, useEffect, type ChangeEvent } from "react"; // เพิ่ม useEffect
 import { Link } from "react-router-dom";
+import type { ProductRequest } from "../StoreApi";
+import { addNewProduct, getProducts, type ProductResponse } from "../StoreApi";
+import "./UserPage.css";
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
@@ -14,6 +17,38 @@ const User: React.FC<SearchBarProps> = ({
 }) => {
   const [query, setQuery] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const [message, setMessage] = useState<string>("");
+  const [products, setProducts] = useState<ProductResponse[]>([]);
+
+  useEffect(() => {
+    getProducts()
+      .then(setProducts)
+      .catch((err) => {
+        setMessage(err.message || "โหลดข้อมูลสินค้าไม่สำเร็จ");
+      });
+  }, []);
+
+  const getProductTypeName = (type: number) => {
+    switch (type) {
+      case 0:
+        return "อาหาร";
+      case 1:
+        return "เครื่องใช้";
+      case 2:
+        return "เครื่องดื่ม";
+      default:
+        return "อื่น ๆ";
+    }
+  };
+
+  const [newProduct, setNewProduct] = useState<Partial<ProductRequest>>({
+    ProductName: "",
+    ProductPrice: 0,
+    ProductType: 0,
+    Quantity: 0,
+    CreateBy: "Seller",
+    IsActive: true,
+  });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -29,6 +64,53 @@ const User: React.FC<SearchBarProps> = ({
     }
   };
 
+  const handleNewProductChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewProduct((prev: Partial<ProductRequest>) => ({
+      ...prev,
+      [name]:
+        name === "ProductPrice" || name === "Quantity" || name === "ProductType"
+          ? Number(value)
+          : value,
+    }));
+  };
+
+  const handleAddProduct = async () => {
+    try {
+      setMessage("กำลังเพิ่มสินค้า...");
+      if (!newProduct.ProductName || newProduct.ProductType === undefined) {
+        ///แก้ตรงนี้นะ
+        setMessage("กรุณากรอกชื่อสินค้าและประเภทสินค้า");
+        return;
+      }
+      if ((newProduct.ProductPrice ?? 0) <= 0) {
+        setMessage("กรุณากรอกราคาสินค้าที่ถูกต้อง");
+        return;
+      }
+      if ((newProduct.Quantity ?? 0) <= 0) {
+        setMessage("กรุณากรอกจำนวนสินค้าที่ถูกต้อง");
+        return;
+      }
+
+      const added = await addNewProduct(newProduct as ProductRequest);
+      setMessage(`เพิ่มสินค้าเรียบร้อย: ${added.ProductName}`);
+      setNewProduct({
+        ProductName: "",
+        ProductPrice: 0,
+        ProductType: 0,
+        Quantity: 0,
+        CreateBy: "seller_user",
+        IsActive: true,
+      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setMessage(error.message);
+      } else {
+        setMessage("เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ");
+      }
+    }
+  };
+
   return (
     <>
       <nav>
@@ -40,6 +122,7 @@ const User: React.FC<SearchBarProps> = ({
       </nav>
 
       <h1>Welcome {role.toUpperCase()} to Store</h1>
+
       {role === "Admin" && (
         <div>
           <h1>📊 Admin Dashboard</h1>
@@ -55,7 +138,7 @@ const User: React.FC<SearchBarProps> = ({
             />
             <button onClick={handleSearchClick}>Search</button>
           </div>
-          <div>
+          <div className="table-container">
             <table>
               <thead>
                 <tr>
@@ -74,8 +157,16 @@ const User: React.FC<SearchBarProps> = ({
 
       {role === "Seller" && (
         <div>
+          <nav>
+            <li>
+              <Link className="read-the-docs" to="/">
+                Sign Out
+              </Link>
+            </li>
+          </nav>
           <h1>📦 Seller Panel</h1>
           <h2>จัดการสินค้าของคุณ / ดูออเดอร์</h2>
+
           <div>
             <input
               type="text"
@@ -87,7 +178,56 @@ const User: React.FC<SearchBarProps> = ({
             />
             <button onClick={handleSearchClick}>Search</button>
           </div>
-          <div>
+
+          <div className="seller-panel">
+            <h3>เพิ่มสินค้าใหม่</h3>
+
+            <label htmlFor="ProductName">ชื่อสินค้า:</label>
+            <input
+              id="productName"
+              type="text"
+              name="ProductName"
+              placeholder="ชื่อสินค้า"
+              value={newProduct.ProductName ?? ""}
+              onChange={handleNewProductChange}
+            />
+
+            <label htmlFor="ProductPrice">ราคาสินค้า:</label>
+            <input
+              id="ProductPrice"
+              type="number"
+              name="ProductPrice"
+              placeholder="ราคาสินค้า"
+              value={newProduct.ProductPrice ?? 0}
+              onChange={handleNewProductChange}
+            />
+
+            <label htmlFor="ProductType">ประเภทสินค้า:</label>
+            <input
+              id="ProductType"
+              type="number"
+              name="ProductType"
+              placeholder="ประเภทสินค้า"
+              value={newProduct.ProductType ?? 0}
+              onChange={handleNewProductChange}
+            />
+
+            <label htmlFor="Quantity">จำนวนสินค้า:</label>
+            <input
+              id="Quantity"
+              type="number"
+              name="Quantity"
+              placeholder="จำนวนสินค้า"
+              value={newProduct.Quantity ?? 0}
+              onChange={handleNewProductChange}
+            />
+
+            <button onClick={handleAddProduct}>เพิ่มสินค้า</button>
+
+            {message && <p className="message">{message}</p>}
+          </div>
+
+          <div className="table-container">
             <table>
               <thead>
                 <tr>
@@ -95,10 +235,24 @@ const User: React.FC<SearchBarProps> = ({
                   <th>วันที่วางจำหน่าย</th>
                   <th>ประเภทสินค้า</th>
                   <th>ราคา</th>
-                  <th>เพิ่มรายการสินค้า</th>
-                  <th>การจัดการ</th>
+                  <th>จำนวนสินค้า</th> <th>การจัดการ</th>
                 </tr>
               </thead>
+              <tbody>
+                {products.map((p) => (
+                  <tr key={p.Id}>
+                    <td>{p.ProductName}</td>
+                    <td>{new Date(p.CreateDate).toLocaleDateString()}</td>
+                    <td>{getProductTypeName(p.ProductType ?? 0)}</td>{" "}
+                    <td>{p.ProductPrice} บาท</td>
+                    <td>{p.Quantity}</td>
+                    <td>
+                      <button>แก้ไข</button>
+                      <button>ลบ</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </div>
@@ -119,11 +273,12 @@ const User: React.FC<SearchBarProps> = ({
             />
             <button onClick={handleSearchClick}>Search</button>
           </div>
-          <div>
+          <div className="table-container">
             <table>
               <thead>
                 <tr>
                   <th>รายการสินค้า</th>
+                  <th>ชื่อสินค้า</th>
                   <th>วันที่วางจำหน่าย</th>
                   <th>จำหน่ายโดย</th>
                   <th>ประเภทสินค้า</th>
@@ -131,6 +286,20 @@ const User: React.FC<SearchBarProps> = ({
                   <th>Action</th>
                 </tr>
               </thead>
+              <tbody>
+                {products.map((p) => (
+                  <tr key={p.Id ?? p.ProductName}>
+                    <td>{p.ProductName}</td>
+                    <td>{new Date(p.CreateDate).toLocaleDateString()}</td>
+                    <td>{p.CreateBy}</td>
+                    <td>{getProductTypeName(p.ProductType ?? 0)}</td>
+                    <td>{p.ProductPrice} บาท</td>
+                    <td>
+                      <button>เพิ่มใส่ตะกร้า</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </div>
