@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../StoreApi";
+import "./Register.css";
 
 type RoleType = "Buyer" | "Seller" | "Admin";
 
@@ -61,21 +61,17 @@ const Register: React.FC = () => {
 
   return (
     <>
-      <div>
-        <a href="../">
-          <button>Home</button>
-        </a>
-      </div>
-      <br />
-      <div className="container min-vh-100 ">
+    
+      <div className="container min-vh-100">
+        <h1>Register</h1>
         <div className="row min-vh-100 justify-content-center align-items-center">
           <form
-            className="col-lg-3 col-sm-4 col-8 mx-auto"
+            className="col-lg-3 col-sm-4 col-8 mx-auto register-form"
             onSubmit={handleSubmit}
           >
             <div className="form-group">
               <label className="w-100">
-                Username :
+                Username:
                 <input
                   type="text"
                   name="username"
@@ -88,7 +84,7 @@ const Register: React.FC = () => {
             </div>
             <div className="form-group">
               <label className="w-100">
-                Password :
+                Password:
                 <input
                   type="password"
                   name="password"
@@ -101,7 +97,7 @@ const Register: React.FC = () => {
             </div>
             <div className="form-group">
               <label className="w-100">
-                Confirm Password :
+                Confirm Password:
                 <input
                   type="password"
                   name="confirmPassword"
@@ -112,7 +108,6 @@ const Register: React.FC = () => {
                 />
               </label>
             </div>
-
             <div className="form-group">
               <label className="w-100">
                 Role:
@@ -131,17 +126,22 @@ const Register: React.FC = () => {
               </label>
             </div>
 
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary btn-submit">
               Sign in
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-home"
+              onClick={() => navigate("/")}
+            >
+              Back to lobby
             </button>
           </form>
         </div>
       </div>
-      <Link className="read-the-docs" to="/">
-        Back to Home
-      </Link>
-      <br />
     </>
   );
 };
+
 export default Register;

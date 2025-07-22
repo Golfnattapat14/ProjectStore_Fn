@@ -43,9 +43,7 @@ const Buyer: React.FC = () => {
 
   const handleSearchClick = () => {
     if (inputRef.current) {
-      // TODO: ใส่ logic ค้นหา ตาม query
       setMessage(`กำลังค้นหา: "${query}"`); 
-      // ตัวอย่าง: filter products หรือเรียก API ใหม่
     }
   };
 
@@ -56,7 +54,6 @@ const Buyer: React.FC = () => {
   };
 
   const handleSignOut = () => {
-    // ลบ localStorage หรือทำตามที่ต้องการก่อนพาไปหน้า login
     localStorage.clear();
     window.location.href = "/login";
   };

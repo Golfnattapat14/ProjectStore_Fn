@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { loginUser, type ILoginState } from "../StoreApi";
 import "./Login.css";
@@ -49,13 +49,9 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <div>
-        <a href="../">
-          <button>Home</button>
-        </a>
-      </div>
-      <br />
       <div className="container min-vh-100">
+            <h1>Login</h1>
+
         <div className="row min-vh-100 justify-content-center align-items-center">
           <form
             className="col-lg-3 col-sm-4 col-8 mx-auto"
@@ -88,12 +84,17 @@ const Login: React.FC = () => {
             <button type="submit" className="btn btn-primary">
               Sign in
             </button>
+            <button
+              type="button"
+              className="btn btn-home"
+              onClick={() => navigate("/")}
+            >
+              Back to lobby
+            </button>
           </form>
         </div>
       </div>
-      <Link className="read-the-docs" to="/">
-        Back to Home
-      </Link>
+     
       <br />
     </>
   );
