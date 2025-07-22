@@ -2,10 +2,16 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
+
 import App from "./App.tsx";
 import Register from "./Register/RegisterPage.tsx";
 import Login from "./Login/LoginPage.tsx";
-import User from "./user/Userpage.tsx";
+
+import Buyer from "./BuyperPanel/BuyerPage.tsx";
+import Seller from "./SellerPanel/SellerPage.tsx";
+import Admin from "./AdminPanel/AdminPage.tsx";
+import EditProductPage from "./SellerPanel/editProductPage.tsx";
+import ProtectedRoute from "./LockRole.tsx"; 
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -13,11 +19,43 @@ createRoot(document.getElementById("root")!).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/buyer" element={<User role="Buyer" />} />
-        <Route path="/seller" element={<User role="Seller" />} />
-        <Route path="/admin" element={<User role="Admin" />} />
-        
+        <Route path="/login" element={<Login />} />
+
+        <Route
+          path="/buyer"
+          element={
+            <ProtectedRoute allowedRoles={["Buyer"]}>
+              <Buyer />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/seller"
+          element={
+            <ProtectedRoute allowedRoles={["Seller"]}>
+              <Seller />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/seller/edit/:id"
+          element={
+            <ProtectedRoute allowedRoles={["Seller"]}>
+              <EditProductPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   </StrictMode>

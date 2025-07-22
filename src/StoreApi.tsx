@@ -1,3 +1,4 @@
+// StoreApi.ts
 export interface RegisterRequest {
   username: string;
   password: string;
@@ -16,7 +17,7 @@ export interface LoginResponse {
 }
 
 export interface ProductResponse {
-  Id: string;
+  id: string;
   productName: string;
   productPrice: number;
   productType?: number;
@@ -29,6 +30,7 @@ export interface ProductResponse {
 }
 
 export interface ProductRequest {
+  Id: string;
   ProductName: string;
   ProductPrice: number;
   ProductType: number;
@@ -37,37 +39,38 @@ export interface ProductRequest {
   IsActive?: boolean;
 }
 
-
-
-
 const BASE_API_URL = "https://localhost:44355/api/";
 
-export async function registerUser(data: RegisterRequest) {
-  try {
-    const response = await fetch(BASE_API_URL + "users/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Register failed");
-    }
-
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error("Register error: " + error.message);
-    }
-    throw new Error("Unknown error");
-  }
+function getToken() {
+  return localStorage.getItem("token") ?? "";
 }
 
-export async function loginUser( credentials: ILoginState): Promise<LoginResponse> {
+function getAuthHeaders() {
+  const token = getToken();
+  return {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
+
+export async function registerUser(data: RegisterRequest) {
+  const response = await fetch(BASE_API_URL + "users/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Register failed");
+  }
+
+  return response.json();
+}
+
+export async function loginUser(
+  credentials: ILoginState
+): Promise<LoginResponse> {
   const response = await fetch(BASE_API_URL + "users/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -79,13 +82,18 @@ export async function loginUser( credentials: ILoginState): Promise<LoginRespons
     throw new Error(errorData.message || "Login failed");
   }
 
-  return await response.json();
+  return response.json();
 }
 
-export async function addNewProduct(product: ProductRequest): Promise<ProductResponse> {
-  const response = await fetch(BASE_API_URL + "users/New-Product", {
+export async function addNewProduct(
+  product: ProductRequest
+): Promise<ProductResponse> {
+  const headers = getAuthHeaders();
+  if (!headers.Authorization) throw new Error("Token not found, please login");
+
+  const response = await fetch(BASE_API_URL + "products", {  // <-- แก้ตรงนี้
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify(product),
   });
 
@@ -94,15 +102,16 @@ export async function addNewProduct(product: ProductRequest): Promise<ProductRes
     throw new Error(errorData.message || "ไม่สามารถเพิ่มสินค้าได้");
   }
 
-  return await response.json();
+  return response.json();
 }
 
 export async function getProducts(): Promise<ProductResponse[]> {
-  const response = await fetch(BASE_API_URL + "users/products", {
+  const headers = getAuthHeaders();
+  if (!headers.Authorization) throw new Error("Token not found, please login");
+
+  const response = await fetch(BASE_API_URL + "products", {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers,
   });
 
   if (!response.ok) {
@@ -110,31 +119,50 @@ export async function getProducts(): Promise<ProductResponse[]> {
     throw new Error(errorData.message || "ไม่สามารถดึงข้อมูลสินค้าได้");
   }
 
-  return await response.json();
-}
-
-export async function updateProduct(id: string, data: {
-  ProductName: string;
-  ProductPrice: number;
-  ProductType: number;
-  Quantity: number;
-  IsActive: boolean;
-}): Promise<ProductResponse> {
-  const response = await fetch(`/api/products/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error("ไม่สามารถอัปเดตข้อมูลสินค้าได้");
-  }
   return response.json();
 }
 
 
+export async function updateProduct(
+  id: string,
+  data: {
+    Id: string;
+    ProductName: string;
+    ProductPrice: number;
+    ProductType: number;
+    Quantity: number;
+    IsActive: boolean;
+  }
+): Promise<ProductResponse> {
+  const headers = getAuthHeaders();
+  if (!headers.Authorization) throw new Error("Token not found, please login");
 
+  const response = await fetch(`${BASE_API_URL}products/${id}`, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(data),
+  });
 
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "ไม่สามารถอัปเดตข้อมูลสินค้าได้");
+  }
 
+  return response.json();
+}
+
+export async function getProductById(id: string): Promise<ProductResponse> {
+  const response = await fetch(`${BASE_API_URL}products/${id}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(
+      errorData.message || "ไม่สามารถดึงข้อมูลสินค้ารายการนี้ได้"
+    );
+  }
+
+  return response.json();
+}
