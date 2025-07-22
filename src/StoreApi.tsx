@@ -30,12 +30,12 @@ export interface ProductResponse {
 }
 
 export interface ProductRequest {
-  Id: string;
+  Id?: string;
   ProductName: string;
   ProductPrice: number;
   ProductType: number;
   Quantity: number;
-  CreateBy: string;
+  CreateBy?: string;
   IsActive?: boolean;
 }
 
@@ -91,7 +91,8 @@ export async function addNewProduct(
   const headers = getAuthHeaders();
   if (!headers.Authorization) throw new Error("Token not found, please login");
 
-  const response = await fetch(BASE_API_URL + "products", {  // <-- แก้ตรงนี้
+  const response = await fetch(BASE_API_URL + "products", {
+    // <-- แก้ตรงนี้
     method: "POST",
     headers,
     body: JSON.stringify(product),
@@ -121,7 +122,6 @@ export async function getProducts(): Promise<ProductResponse[]> {
 
   return response.json();
 }
-
 
 export async function updateProduct(
   id: string,

@@ -17,6 +17,7 @@ const LockRole = ({ children, allowedRoles }: LockRoleProps) => {
   return <>{children}</>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const signOut = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("role");

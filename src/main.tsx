@@ -11,7 +11,9 @@ import Buyer from "./BuyperPanel/BuyerPage.tsx";
 import Seller from "./SellerPanel/SellerPage.tsx";
 import Admin from "./AdminPanel/AdminPage.tsx";
 import EditProductPage from "./SellerPanel/editProductPage.tsx";
-import ProtectedRoute from "./LockRole.tsx"; 
+import ProtectedRoute from "./LockRole.tsx";
+
+import AddProductPage from "./SellerPanel/AddProductPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -53,6 +55,14 @@ createRoot(document.getElementById("root")!).render(
           element={
             <ProtectedRoute allowedRoles={["Seller"]}>
               <EditProductPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/seller/add"
+          element={
+            <ProtectedRoute allowedRoles={["Seller"]}>
+              <AddProductPage />
             </ProtectedRoute>
           }
         />

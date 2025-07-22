@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
-import { Link } from "react-router-dom";
 import { getProducts, type ProductResponse } from "../StoreApi";
 import "../UserPage.css";
 
@@ -7,10 +6,10 @@ const Buyer: React.FC = () => {
   const [query, setQuery] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [products, setProducts] = useState<ProductResponse[]>([]);
-  const [message] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
-  const [, setLoading] = useState<boolean>(false);
-  const [, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     setLoading(true);
@@ -44,7 +43,9 @@ const Buyer: React.FC = () => {
 
   const handleSearchClick = () => {
     if (inputRef.current) {
-      // ใส่ logic ค้นหาได้ตรงนี้ เช่น onSearch(query);
+      // TODO: ใส่ logic ค้นหา ตาม query
+      setMessage(`กำลังค้นหา: "${query}"`); 
+      // ตัวอย่าง: filter products หรือเรียก API ใหม่
     }
   };
 
@@ -54,20 +55,24 @@ const Buyer: React.FC = () => {
     }
   };
 
+  const handleSignOut = () => {
+    // ลบ localStorage หรือทำตามที่ต้องการก่อนพาไปหน้า login
+    localStorage.clear();
+    window.location.href = "/login";
+  };
+
   return (
-    <>
-      <nav>
-        <li>
-          <Link className="read-the-docs" to="/">
-            Sign Out
-          </Link>
-        </li>
+    <div className="buyer-container">
+      <nav className="buyer-navbar">
+        <h1>🛒 Store Shop</h1>
+        <button className="signout-button" onClick={handleSignOut}>
+          Sign Out
+        </button>
       </nav>
 
-      <h1>🛒 Store Shop</h1>
-      <h2>เลือกซื้อสินค้า / ดูโปรโมชั่น</h2>
+      <h2 className="buyer-subtitle">เลือกซื้อสินค้า / ดูโปรโมชั่น</h2>
 
-      <div>
+      <div className="search-wrapper">
         <input
           type="text"
           placeholder="ค้นหาสินค้าที่ต้องการ ..."
@@ -75,9 +80,16 @@ const Buyer: React.FC = () => {
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           ref={inputRef}
+          className="search-input"
         />
-        <button onClick={handleSearchClick}>Search</button>
+        <button onClick={handleSearchClick} className="search-button">
+          Search
+        </button>
       </div>
+
+      {loading && <p>กำลังโหลดข้อมูล...</p>}
+      {error && <p className="error-message">{error}</p>}
+      {message && <p className="info-message">{message}</p>}
 
       <div className="table-container">
         <table>
@@ -104,16 +116,14 @@ const Buyer: React.FC = () => {
                 <td>{p.quantity}</td>
                 <td>{p.productPrice} บาท</td>
                 <td>
-                  <button>เพิ่มใส่ตะกร้า</button>
+                  <button className="add-to-cart-button">เพิ่มใส่ตะกร้า</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      {message && <p className="message">{message}</p>}
-    </>
+    </div>
   );
 };
 
