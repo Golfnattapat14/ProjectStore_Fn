@@ -22,19 +22,24 @@ const AddProductPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setProduct((prev) => ({
-      ...prev,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : name === "ProductPrice" ||
-            name === "Quantity" ||
-            name === "ProductType"
-          ? Number(value)
-          : value,
-    }));
-  };
+  const { name, value, type, checked } = e.target;
+
+  let newValue: string | number | boolean;
+
+  if (type === "checkbox") {
+    newValue = checked;
+  } else if (["ProductPrice", "Quantity", "ProductType"].includes(name)) {
+    newValue = Number(value);
+  } else {
+    newValue = value;
+  }
+
+  setProduct(prev => ({
+    ...prev,
+    [name]: newValue,
+  }));
+};
+
 
   const handleSave = async (e?: React.MouseEvent) => {
     e?.preventDefault();

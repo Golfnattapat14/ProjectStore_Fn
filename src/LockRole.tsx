@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface LockRoleProps {
   children: React.ReactNode;
@@ -6,11 +7,17 @@ interface LockRoleProps {
 }
 
 const LockRole = ({ children, allowedRoles }: LockRoleProps) => {
+  const navigate = useNavigate();
   const userRole = localStorage.getItem("role")?.toLowerCase() ?? "";
   const allowedRolesLower = allowedRoles.map(role => role.toLowerCase());
 
+  useEffect(() => {
+    if (!userRole || !allowedRolesLower.includes(userRole)) {
+      navigate("/login", { replace: true });
+    }
+  }, [userRole, allowedRolesLower, navigate]);
+
   if (!userRole || !allowedRolesLower.includes(userRole)) {
-    window.location.href = "/login"; 
     return null;
   }
 

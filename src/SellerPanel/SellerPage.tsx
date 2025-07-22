@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { ProductResponse } from "../StoreApi";
 import { getProducts } from "../StoreApi";
 import "./Seller&edit.css";
@@ -52,15 +52,17 @@ const SellerPage: React.FC = () => {
       handleSearchClick();
     }
   };
+ const handleSignOut = () => {
+    localStorage.clear();
+    window.location.href = "/login";
+  };
 
   return (
     <div className="seller-page">
       <nav>
-        <li>
-          <Link className="read-the-docs" to="/">
-            Sign Out
-          </Link>
-        </li>
+        <button className="signout-button" onClick={handleSignOut}>
+          Sign Out
+        </button>
       </nav>
 
       <h2 className="seller-title">
