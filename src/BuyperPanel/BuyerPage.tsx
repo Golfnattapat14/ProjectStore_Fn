@@ -43,7 +43,7 @@ const Buyer: React.FC = () => {
 
   const handleSearchClick = () => {
     if (inputRef.current) {
-      setMessage(`กำลังค้นหา: "${query}"`); 
+      setMessage(`กำลังค้นหา: "${query}"`);
     }
   };
 
@@ -61,7 +61,7 @@ const Buyer: React.FC = () => {
   return (
     <div className="buyer-container">
       <nav className="buyer-navbar">
-        <h1>🛒 Store Shop</h1>
+        <h1 className="title">Store Shope</h1>
         <button className="signout-button" onClick={handleSignOut}>
           Sign Out
         </button>

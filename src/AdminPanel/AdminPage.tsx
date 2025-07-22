@@ -67,7 +67,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     <div>
       {/* Navbar */}
       <nav className="admin-navbar">
-        <h1>📊 Admin Dashboard</h1>
+<h1 className="title">Admin Dashboard</h1>
         <div className="search-container">
           <input
             type="text"
@@ -88,7 +88,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
       </nav>
 
-      <h3>ดูข้อมูลทั้งหมด / จัดการระบบ</h3>
+      <h3 className="title">ดูข้อมูลทั้งหมด / จัดการระบบ</h3>
 
       {loading && <p>กำลังโหลดข้อมูล...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}

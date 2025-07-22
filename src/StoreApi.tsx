@@ -92,7 +92,6 @@ export async function addNewProduct(
   if (!headers.Authorization) throw new Error("Token not found, please login");
 
   const response = await fetch(BASE_API_URL + "products", {
-    // <-- แก้ตรงนี้
     method: "POST",
     headers,
     body: JSON.stringify(product),

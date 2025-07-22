@@ -1,36 +1,35 @@
 /* ======= UserPage.css ======= */
 
-/* Body และ Container หลัก (ใช้กับ Buyer และ Register) */
+/* ===== Body และ Container หลัก ===== */
 body {
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f4f6fc;
-  color: #333;
+  color: #222;
 }
 
-.buyer-container,
-.container {
+.container,
+.buyer-container {
   max-width: 1000px;
   margin: 30px auto;
   padding: 0 20px 40px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* กรณี container ที่เป็น form register */
 .register-form {
   background: white;
   padding: 30px 25px;
   border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   margin: auto;
 }
 
-/* ===== Navbar (สำหรับ Buyer) ===== */
+/* ===== Navbar ===== */
 nav {
-  background-color: #6c63ff;
+  background-color: #293c57;
   padding: 15px 30px;
   box-shadow: 0 4px 10px rgba(108, 99, 255, 0.5);
   display: flex;
@@ -42,7 +41,7 @@ nav li {
 }
 
 nav a.read-the-docs {
-  color: rgb(221, 0, 0);
+  color: #fff;
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
@@ -50,14 +49,15 @@ nav a.read-the-docs {
   border: 2px solid transparent;
   border-radius: 6px;
   transition: background-color 0.3s, border-color 0.3s;
+  background-color: #ff4d4d;
 }
 
 nav a.read-the-docs:hover {
-  background-color: #ff3300;
+  background-color: #cc0000;
   border-color: white;
 }
 
-/* Buyer Navbar แบบ Flex */
+/* ===== Buyer Navbar ===== */
 .buyer-navbar {
   display: flex;
   justify-content: space-between;
@@ -72,6 +72,7 @@ nav a.read-the-docs:hover {
   user-select: none;
 }
 
+/* ===== ปุ่ม Sign Out ===== */
 .signout-button {
   background-color: #ff6b6b;
   border: none;
@@ -92,14 +93,14 @@ h1 {
   margin-top: 30px;
   margin-bottom: 10px;
   font-weight: 700;
-  color: #3a3a3a;
+  color: #1f1f1f;
   text-align: center;
 }
 
 h2 {
   margin-bottom: 25px;
-  font-weight: 500;
-  color: #555;
+  font-weight: 600;
+  color: #2c2c2c;
   text-align: center;
 }
 
@@ -108,10 +109,10 @@ h2 {
   font-weight: 600;
   font-size: 1.4rem;
   text-align: center;
-  color: #4a4a4a;
+  color: #2a2a2a;
 }
 
-/* ===== Search input & button ===== */
+/* ===== Search ===== */
 .search-wrapper {
   display: flex;
   justify-content: center;
@@ -125,12 +126,10 @@ input[type="text"] {
   max-width: 400px;
   padding: 10px 15px;
   font-size: 1rem;
-  border: 1.8px solid #ced4da;
-  border-radius: 8px 0 0 8px;
+  border: 1.8px solid #6c63ff;
+  border-radius: 6px 0 0 6px;
   outline: none;
   transition: border-color 0.3s ease;
-  border-radius: 6px 0 0 6px; /* ให้เหมือนกัน */
-  border-color: #6c63ff;
 }
 
 .search-input:focus,
@@ -147,9 +146,8 @@ button {
   padding: 10px 18px;
   font-weight: 600;
   cursor: pointer;
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 6px 6px 0;
   transition: background-color 0.3s ease;
-  border-radius: 0 6px 6px 0; /* ให้เหมือนกัน */
 }
 
 .search-button:hover,
@@ -157,7 +155,7 @@ button:hover {
   background-color: #574fd6;
 }
 
-/* ===== ปุ่มต่าง ๆ ===== */
+/* ===== ปุ่มหลัก ๆ ===== */
 .add-button,
 .add-to-cart-button {
   background-color: #28a745;
@@ -212,7 +210,7 @@ button:hover {
   background-color: #888;
 }
 
-/* ===== ข้อความแจ้งสถานะ ===== */
+/* ===== ข้อความแจ้งเตือน ===== */
 .error-message {
   color: #d9534f;
   text-align: center;
@@ -227,7 +225,7 @@ button:hover {
   font-weight: 600;
 }
 
-/* ===== Form group ===== */
+/* ===== ฟอร์ม ===== */
 .form-group {
   margin-bottom: 18px;
 }
@@ -235,7 +233,7 @@ button:hover {
 label.w-100 {
   font-weight: 600;
   font-size: 1.05rem;
-  color: #333;
+  color: #2d2d2d;
   display: block;
   margin-bottom: 6px;
 }
@@ -248,6 +246,7 @@ select.form-control {
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.3s ease;
+  color: #1e1e1e;
 }
 
 input.form-control:focus,
@@ -257,7 +256,7 @@ select.form-control:focus {
   box-shadow: 0 0 6px #a29bfeaa;
 }
 
-/* ===== ตาราง (Table) ===== */
+/* ===== ตาราง ===== */
 .table-container {
   margin-top: 20px;
   overflow-x: auto;
@@ -266,12 +265,11 @@ select.form-control:focus {
 table {
   border-collapse: collapse;
   width: 100%;
-  max-width: 100%;
   background-color: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  overflow: hidden;
   font-size: 0.95rem;
+  overflow: hidden;
 }
 
 thead {
@@ -280,21 +278,18 @@ thead {
   user-select: none;
 }
 
-thead tr {
-  user-select: none;
-}
-
 thead th,
-th, td {
+th,
+td {
   text-align: center;
   padding: 12px 15px;
   border-bottom: 1px solid #ddd;
   font-size: 0.95rem;
   white-space: nowrap;
+  color: #222;
 }
 
 tbody tr {
-  border-bottom: 1px solid #ddd;
   transition: background-color 0.25s ease;
 }
 
@@ -306,7 +301,6 @@ tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* ปุ่มแก้ไขในตาราง */
 table tbody tr td button {
   padding: 6px 12px;
   background-color: #ffc107;
@@ -320,4 +314,62 @@ table tbody tr td button {
 
 table tbody tr td button:hover {
   background-color: #e0a800;
+}
+.title {
+  color: #ffffff;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+/* Checked */
+.toggle-switch input:checked + .slider {
+  background-color: #4caf50;
+}
+
+.toggle-switch input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* Rounded style */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
