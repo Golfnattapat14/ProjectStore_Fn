@@ -77,11 +77,11 @@ const EditProductPage: React.FC = () => {
       !product.ProductName ||
       (product.ProductPrice ?? 0) <= 0 ||
       (product.Quantity ?? 0) < 0 ||
-      product.ProductType! < 0 ||
-      product.ProductType! > 3
+      product.ProductType! < 1 ||
+      product.ProductType! > 5
     ) {
       setMessage(
-        "กรุณากรอกข้อมูลให้ถูกต้อง และประเภทสินค้าต้องอยู่ระหว่าง 0 ถึง 3"
+        "กรุณากรอกข้อมูลให้ถูกต้อง และประเภทสินค้าต้องอยู่ระหว่าง 1 ถึง 5"
       );
       return;
     }
@@ -138,15 +138,28 @@ const EditProductPage: React.FC = () => {
         />
       </label>
       <label htmlFor="productType">
-        ประเภทสินค้า (0=อาหาร,1=เครื่องใช้,2=เครื่องดื่ม,3=ของเล่น):
+        <center>
+          ประเภทสินค้า
+          <br />
+          1=อาหาร
+          <br />
+          2= เครื่องใช้
+          <br />
+          3= เครื่องดื่ม
+          <br />
+          4= ของเล่น
+          <br />
+          5= อื่นๆ
+        </center>
+
         <input
           id="productType"
           type="number"
           name="ProductType"
-          value={product.ProductType ?? 0}
+          value={product.ProductType}
           onChange={handleChange}
-          min={0}
-          max={3}
+          min={1}
+          max={5}
           disabled={saving}
         />
       </label>

@@ -1,17 +1,21 @@
 import React, { useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { type ProductRequest, addNewProduct } from "../StoreApi"; // ใช้ addNewProduct ตามที่ให้มา
+import { type ProductRequest, addNewProduct } from "../StoreApi";
 import "./Seller&edit.css";
 
 const AddProductPage: React.FC = () => {
   const navigate = useNavigate();
 
+  const savedUser = localStorage.getItem("user");
+  const currentUser = savedUser ? JSON.parse(savedUser) : null;
+
   const [product, setProduct] = useState<ProductRequest>({
     ProductName: "",
     ProductPrice: 0,
-    ProductType: 0,
+    ProductType: 5,
     Quantity: 0,
     IsActive: true,
+    CreateBy: currentUser?.username || "",
   });
 
   const [message, setMessage] = useState("");
@@ -39,11 +43,11 @@ const AddProductPage: React.FC = () => {
       !product.ProductName.trim() ||
       product.ProductPrice <= 0 ||
       product.Quantity < 0 ||
-      product.ProductType < 0 ||
-      product.ProductType > 3
+      product.ProductType < 1 ||
+      product.ProductType > 5
     ) {
       setMessage(
-        "กรุณากรอกข้อมูลให้ถูกต้อง และประเภทสินค้าต้องอยู่ระหว่าง 0 ถึง 3"
+        "กรุณากรอกข้อมูลให้ถูกต้อง และประเภทสินค้าต้องอยู่ระหว่าง 1 ถึง 5"
       );
       return;
     }
@@ -93,15 +97,28 @@ const AddProductPage: React.FC = () => {
         />
       </label>
       <label htmlFor="productType">
-        ประเภทสินค้า (0=อาหาร,1=เครื่องใช้,2=เครื่องดื่ม,3=ของเล่น):
+        <center>
+          ประเภทสินค้า
+          <br />
+          1=อาหาร
+          <br />
+          2= เครื่องใช้
+          <br />
+          3= เครื่องดื่ม
+          <br />
+          4= ของเล่น
+          <br />
+          5= อื่นๆ
+        </center>
+
         <input
           id="productType"
           type="number"
           name="ProductType"
           value={product.ProductType}
           onChange={handleChange}
-          min={0}
-          max={3}
+          min={1}
+          max={5}
           disabled={saving}
         />
       </label>
