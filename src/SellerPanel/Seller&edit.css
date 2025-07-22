@@ -1,162 +1,229 @@
-/* รวม CSS สำหรับ SellerPage และ EditProductPage */
-
-/* SellerPage.css */
+/* === Navbar (bar บน) === */
 .seller-page nav {
-  background-color: #f5f5f5;
-  padding: 10px;
+  background-color: #ff5722; /* สีส้มเข้ม */
+  padding: 12px 20px;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
 }
 
 .seller-page nav li {
   list-style: none;
   display: inline-block;
-  margin-right: 15px;
+  margin-right: 18px;
 }
 
 .seller-page nav a.read-the-docs {
-  color: #007bff;
+  color: #fff;
   text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 .seller-page nav a.read-the-docs:hover {
+  color: #ffd180;
   text-decoration: underline;
+}
+
+/* === Title === */
+.seller-title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #ff5722;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.15);
 }
 
 .seller-page h1 {
   font-size: 2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.7rem;
+  color: #ffffff;
+  font-weight: 700;
 }
 
 .seller-page h2 {
-  color: #555;
-  margin-bottom: 1rem;
+  color: #ffffff;
+  margin-bottom: 1.2rem;
+  font-weight: 500;
 }
 
+/* === Inputs === */
 .seller-page input[type="text"],
 .seller-page input[type="number"] {
-  padding: 6px 8px;
-  margin: 5px 0 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 200px;
+  padding: 8px 10px;
+  margin: 8px 0 15px 0;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  max-width: 260px;
   box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
 }
 
+.seller-page input[type="text"]:focus,
+.seller-page input[type="number"]:focus {
+  border-color: #ff5722;
+  outline: none;
+}
+
+/* === Buttons === */
 .seller-page button {
-  background-color: #28a745;
+  background-color: #ff5722;
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
+  padding: 10px 18px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 15px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
 .seller-page button:hover {
-  background-color: #218838;
+  background-color: #e64a19;
+}
+
+/* === Card (Panel) ครอบเต็ม container === */
+.seller-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  box-sizing: border-box;
 }
 
 .seller-page .seller-panel {
-  margin-top: 30px;
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  max-width: 350px;
+  width: 100%;
+  background-color: #fff;
+  padding: 30px 28px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+  margin-top: 35px;
 }
 
+/* Label */
 .seller-page .seller-panel label {
   display: block;
-  margin-top: 10px;
-  font-weight: 600;
-}
-
-.seller-page .message {
   margin-top: 15px;
-  color: #d63333;
-  font-weight: bold;
+  font-weight: 600;
+  color: #333;
+  font-size: 1.05rem;
 }
 
+/* Message error */
+.seller-page .message {
+  margin-top: 20px;
+  color: #d32f2f;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* Table container */
 .seller-page .table-container {
-  margin-top: 40px;
+  margin-top: 45px;
   overflow-x: auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  border-radius: 12px;
 }
 
+/* Table */
 .seller-page table {
   border-collapse: collapse;
   width: 100%;
   min-width: 700px;
+  font-size: 0.95rem;
 }
 
 .seller-page th,
 .seller-page td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 10px 14px;
   text-align: center;
 }
 
 .seller-page th {
-  background-color: #f8f9fa;
+  background-color: #ffe0b2;
   font-weight: 700;
+  color: #bf360c;
 }
 
 .seller-page tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: #fff3e0;
 }
 
 .seller-page tr:hover {
-  background-color: #ddd;
+  background-color: #ffcc80;
+  transition: background-color 0.25s ease;
 }
 
+/* Table buttons */
 .seller-page td button {
-  background-color: #007bff;
-  padding: 5px 12px;
-  border-radius: 4px;
+  background-color: #ff5722;
+  padding: 7px 15px;
+  border-radius: 6px;
   border: none;
   color: white;
   cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
 .seller-page td button:hover {
-  background-color: #0056b3;
+  background-color: #e64a19;
 }
 
-
-/* EditProductPage.css */
+/* === EditProductPage styles === */
 .edit-page {
   max-width: 450px;
-  margin: 30px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fafafa;
-  font-family: Arial, sans-serif;
+  margin: 40px auto;
+  padding: 25px 30px;
+  border-radius: 10px;
+  background-color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  color: #222;
 }
 
 .edit-page h2 {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   text-align: center;
-  color: #333;
+  color: #ff5722;
+  font-weight: 700;
+  font-size: 1.9rem;
 }
 
 .edit-page label {
   display: block;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   font-weight: 600;
   color: #444;
+  font-size: 1.1rem;
 }
 
 .edit-page input[type="text"],
 .edit-page input[type="number"] {
   width: 100%;
-  padding: 8px 10px;
-  margin-top: 5px;
-  border: 1px solid #bbb;
-  border-radius: 5px;
+  padding: 10px 14px;
+  margin-top: 8px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
   box-sizing: border-box;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.edit-page input[type="text"]:focus,
+.edit-page input[type="number"]:focus {
+  border-color: #ff5722;
+  outline: none;
 }
 
 .edit-page input[type="checkbox"] {
-  margin-right: 8px;
+  margin-right: 10px;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 .edit-page span {
@@ -165,28 +232,202 @@
 
 .edit-page div {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .edit-page button {
-  background-color: #007bff;
+  background-color: #ff5722;
   color: white;
-  padding: 10px 20px;
-  margin: 0 10px;
+  padding: 12px 28px;
+  margin: 0 12px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.edit-page button:hover:not(:disabled) {
+  background-color: #e64a19;
 }
 
 .edit-page button:disabled {
-  background-color: #6c757d;
+  background-color: #a8a8a8;
   cursor: not-allowed;
 }
 
 .edit-page p {
-  margin-top: 15px;
-  color: #d9534f;
-  font-weight: 600;
+  margin-top: 20px;
+  color: #d32f2f;
+  font-weight: 700;
   text-align: center;
+  font-size: 1.1rem;
+}
+
+/* Container */
+.seller-page {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 24px 40px 24px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Navbar */
+.seller-page nav {
+  background-color: #ff5722;
+  border-radius: 8px;
+  padding: 12px 20px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.seller-page nav li {
+  list-style: none;
+}
+
+.seller-page nav a.read-the-docs {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1.05rem;
+  transition: color 0.25s ease;
+}
+
+.seller-page nav a.read-the-docs:hover {
+  color: #ffd180;
+  text-decoration: underline;
+}
+
+/* Title */
+.seller-title {
+  font-size: 2.8rem;
+  color: #ff5722;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 6px;
+  user-select: none;
+}
+
+.seller-page h2 {
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 28px;
+}
+
+/* Search bar */
+.search-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.search-section input[type="text"] {
+  flex-grow: 1;
+  padding: 12px 16px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1.8px solid #ccc;
+  transition: border-color 0.3s ease;
+}
+
+.search-section input[type="text"]:focus {
+  outline: none;
+  border-color: #ff5722;
+  box-shadow: 0 0 6px #ff5722aa;
+}
+
+.search-section button {
+  background-color: #ff5722;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.search-section button:hover {
+  background-color: #e64a19;
+}
+
+/* Add button */
+.add-button-container {
+  margin-bottom: 32px;
+  text-align: right;
+}
+
+.add-button {
+  background-color: #2196f3;
+  color: white;
+  font-weight: 600;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-button:hover {
+  background-color: #1976d2;
+}
+
+/* Table container */
+.table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.07);
+}
+
+/* Table */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 720px;
+  font-size: 1rem;
+  background-color: #fff;
+}
+
+th,
+td {
+  padding: 14px 18px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  color: #444;
+}
+
+th {
+  background-color: #ffccbc;
+  color: #bf360c;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+tbody tr:hover {
+  background-color: #ffecdc;
+  transition: background-color 0.3s ease;
+}
+
+/* Buttons inside table */
+td button {
+  background-color: #ff5722;
+  padding: 8px 16px;
+  font-weight: 600;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+td button:hover {
+  background-color: #e64a19;
 }

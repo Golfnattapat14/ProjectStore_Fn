@@ -6,13 +6,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  background: #f0f4f8;
+  padding: 20px ;
+  background: #ffffff;
 }
 
 /* Form กรอบขาว มีเงานุ่ม ๆ */
 form {
-  background: white;
+  background: rgb(255, 255, 255);
   padding: 30px 25px;
   border-radius: 15px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);

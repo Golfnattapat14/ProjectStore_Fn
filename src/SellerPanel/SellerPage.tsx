@@ -44,7 +44,7 @@ const SellerPage: React.FC = () => {
   };
   const handleSearchClick = () => {
     if (inputRef.current) {
-      // wait for Search api
+      // รอใส่ logic ค้นหา
     }
   };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -54,7 +54,7 @@ const SellerPage: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="seller-page">
       <nav>
         <li>
           <Link className="read-the-docs" to="/">
@@ -62,10 +62,20 @@ const SellerPage: React.FC = () => {
           </Link>
         </li>
       </nav>
-      <h1>📦 Seller Panel</h1>
-      <h2>จัดการสินค้าของคุณ / ดูออเดอร์</h2>
 
-      <div>
+      <h2 className="seller-title">
+        <span role="img" aria-label="box">
+          📦
+        </span>{" "}
+        Seller Panel
+      </h2>
+      <h1 className="seller-title">
+        <span role="img" aria-label="box">
+          
+        </span>{" "}
+จัดการสินค้าของคุณ / ดูออเดอร์      </h1>
+
+      <div className="search-section">
         <input
           type="text"
           placeholder="ค้นหาสินค้าที่ต้องการ ..."
@@ -76,9 +86,8 @@ const SellerPage: React.FC = () => {
         />
         <button onClick={handleSearchClick}>Search</button>
       </div>
-      <br />
 
-      <div style={{ marginTop: "1rem" }}>
+      <div className="add-button-container">
         <button onClick={() => navigate("/seller/add")} className="add-button">
           + เพิ่มสินค้าใหม่
         </button>
@@ -127,7 +136,7 @@ const SellerPage: React.FC = () => {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 };
 

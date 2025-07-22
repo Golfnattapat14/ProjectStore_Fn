@@ -67,7 +67,7 @@ const Buyer: React.FC = () => {
         </button>
       </nav>
 
-      <h2 className="buyer-subtitle">เลือกซื้อสินค้า / ดูโปรโมชั่น</h2>
+      <h2 className="buyer-subtitle">เลือกซื้อสินค้า</h2>
 
       <div className="search-wrapper">
         <input
