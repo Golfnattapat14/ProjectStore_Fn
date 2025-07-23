@@ -11,16 +11,19 @@ const Buyer: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  useEffect(() => {
-    setLoading(true);
-    getProducts()
-      .then((data) => {
-        setProducts(data);
-        setError("");
-      })
-      .catch((err) => setError(err.message || "เกิดข้อผิดพลาด"))
-      .finally(() => setLoading(false));
-  }, []);
+ useEffect(() => {
+  setLoading(true);
+  getProducts()
+    .then((data) => {
+      console.log("Products from API:", data);
+      setProducts(data);
+      setError("");
+    })
+    .catch((err) => setError(err.message || "เกิดข้อผิดพลาด"))
+    .finally(() => setLoading(false));
+}, []);
+
+
 
   const getProductTypeName = (type: number) => {
     switch (type) {
@@ -108,7 +111,7 @@ const Buyer: React.FC = () => {
                 <td>{index + 1}</td>
                 <td>{p.productName}</td>
                 <td>{new Date(p.createDate).toLocaleDateString()}</td>
-                <td>{p.createBy}</td>
+                <td>{p.createdByName}</td>
                 <td>{getProductTypeName(p.productType ?? 0)}</td>
                 <td>{p.quantity}</td>
                 <td>{p.productPrice} บาท</td>

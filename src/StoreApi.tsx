@@ -27,6 +27,7 @@ export interface ProductResponse {
   updateDate?: string;
   updateBy?: string;
   isActive?: boolean;
+  createdByName: string;
 }
 
 export interface ProductRequest {
@@ -85,10 +86,11 @@ export async function loginUser(
   return response.json();
 }
 
-export async function addNewProduct(
-  product: ProductRequest
-): Promise<ProductResponse> {
+
+
+export async function addNewProduct(product: ProductRequest): Promise<ProductResponse> {
   const headers = getAuthHeaders();
+
   if (!headers.Authorization) throw new Error("Token not found, please login");
 
   const response = await fetch(BASE_API_URL + "products", {
@@ -105,13 +107,32 @@ export async function addNewProduct(
   return response.json();
 }
 
+
+
 export async function getProducts(): Promise<ProductResponse[]> {
   const headers = getAuthHeaders();
   if (!headers.Authorization) throw new Error("Token not found, please login");
 
-  const response = await fetch(BASE_API_URL + "products", {
+  const response = await fetch(BASE_API_URL + "buyer/all", {
     method: "GET",
     headers,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "ไม่สามารถดึงข้อมูลสินค้าได้");
+  }
+
+  return response.json();
+}
+
+export async function getProductsSeller(): Promise<ProductResponse[]> {
+  const headers = getAuthHeaders();
+  if (!headers.Authorization) throw new Error("Token not found, please login");
+
+  const response = await fetch(BASE_API_URL + "Products/all", {
+    method: "GET",
+    headers: headers,
   });
 
   if (!response.ok) {

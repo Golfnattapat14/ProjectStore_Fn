@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ProductResponse } from "../StoreApi";
-import { getProducts } from "../StoreApi";
+import { getProductsSeller } from "../StoreApi";
 import "./Seller&edit.css";
 
 const SellerPage: React.FC = () => {
@@ -15,7 +15,7 @@ const SellerPage: React.FC = () => {
 
   useEffect(() => {
     setLoading(true);
-    getProducts()
+    getProductsSeller()
       .then((data) => {
         setProducts(data);
         setError("");
