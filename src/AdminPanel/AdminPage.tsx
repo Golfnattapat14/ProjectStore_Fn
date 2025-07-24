@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { getProducts, getUsers, updateUser } from "../API/adminApi";
+import { deleteUser, getProducts, getUsers, updateUser } from "../API/adminApi";
 import type { ProductResponse, UpdateUserRequest, User } from "../API/types";
-import "../UserPage.css";
+import "./styleAdmin.css";
 import { signOut } from "../LockRole";
+
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [errorUsers, setErrorUsers] = useState("");
-
 
   useEffect(() => {
     setLoadingUsers(true);
@@ -23,24 +23,40 @@ const ManageUsers: React.FC = () => {
   if (loadingUsers) return <p>กำลังโหลดข้อมูลผู้ใช้...</p>;
   if (errorUsers) return <p style={{ color: "red" }}>{errorUsers}</p>;
 
-
-  const handleToggleActive = async (user : User) => {
-    const updated : UpdateUserRequest = {
-      username : user.username,
-      role : user.role,
-      isDeleted : !user.isDeleted
+  const handleToggleActive = async (user: User) => {
+    const updated: UpdateUserRequest = {
+      username: user.username,
+      role: user.role,
+      isDeleted: !user.isDeleted,
     };
     try {
-        await updateUser(user.id, updated);
-        setUsers((prev)=>
-        prev.map((u) => (u.id === user.id ? { ...u, isDeleted: !u.isDeleted } : u))
+      await updateUser(user.id, updated);
+      setUsers((prev) =>
+        prev.map((u) =>
+          u.id === user.id ? { ...u, isDeleted: !u.isDeleted } : u
+        )
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
+    } catch (error) {
       alert("ไม่สามารถอัปเดตสถานะได้");
     }
   };
+  const handleDeleteUsers = async (id: string) => {
+    const confirmDelete = window.confirm("คุณแน่ใจว่าจะลบผู้ใช้นี้ออกจากระบบ?");
+    if (!confirmDelete) return;
 
+    try {
+      await deleteUser(id);
+      const updatedUsers = await getUsers();
+      setUsers(updatedUsers);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert(String(err));
+      }
+    }
+  };
 
   return (
     <div>
@@ -51,7 +67,7 @@ const ManageUsers: React.FC = () => {
             <th>ลำดับ</th>
             <th>ชื่อผู้ใช้</th>
             <th>บทบาท</th>
-            <th>สถานะ</th>
+            <th>ปิดการใช้งาน user</th>
             <th>จัดการ</th>
           </tr>
         </thead>
@@ -62,17 +78,33 @@ const ManageUsers: React.FC = () => {
               <td>{u.username}</td>
               <td>{u.role}</td>
               <td>
-                <label className="switch">
-                  <input 
-                  type="checkbox"
-                  checked={!u.isDeleted}
-                  onChange={() => handleToggleActive(u)} />
-                  
+                <label className="toggle-switch">
+                  <input
+                    type="checkbox"
+                    checked={!u.isDeleted}
+                    onChange={() => handleToggleActive(u)}
+                  />
+                  <span className="slider round"></span>
                 </label>
+                <span
+                  style={{
+                    marginLeft: "10px",
+                    fontWeight: 500,
+                    color: !u.isDeleted ? "#ff0800ff" : "#2ff902ff",
+                  }}
+                >
+                  {!u.isDeleted ? "Disble" : "Enable"}
+                </span>
               </td>
+
               <td>
-                <button onClick={() => alert("แก้ไขผู้ใช้ id:"+ u.id)}>แก้ไข</button>
-                
+                <button onClick={() => alert("แก้ไขผู้ใช้ id:" + u.id)}>
+                  แก้ไข
+                </button>
+                <button 
+                className="delete-button"
+                onClick={() => handleDeleteUsers(u.id)}
+                >ลบผู้ใช้นี้</button>
               </td>
             </tr>
           ))}
@@ -151,7 +183,9 @@ const AdminDashboard: React.FC = () => {
                 <td>{new Date(p.createDate).toLocaleDateString()}</td>
                 <td>{getProductTypeName(p.productType ?? 0)}</td>
                 <td>{p.productPrice} บาท</td>
-                <td><button>แก้ไขสินค้า : {p.productName}</button></td>
+                <td>
+                  <button>แก้ไขสินค้า : {p.productName}</button>
+                </td>
               </tr>
             ))}
           </tbody>

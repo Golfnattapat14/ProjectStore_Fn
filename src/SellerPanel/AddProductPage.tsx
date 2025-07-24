@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { addNewProduct } from "../API/sellerApi";
 import type { ProductRequest } from "../API/types";
 
-import "./Seller&edit.css";
+import "./styleSeller_.css";
 
 const AddProductPage: React.FC = () => {
   const navigate = useNavigate();

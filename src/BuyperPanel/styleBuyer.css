@@ -1,4 +1,4 @@
-/* ======= UserPage.css ======= */
+/* ======= BuyerPage.css ======= */
 
 /* ===== Body และ Container หลัก ===== */
 body {
@@ -16,15 +16,6 @@ body {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
-
-.register-form {
-  background: white;
-  padding: 30px 25px;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  margin: auto;
 }
 
 /* ===== Navbar ===== */
@@ -173,43 +164,6 @@ button:hover {
   background-color: #218838;
 }
 
-.btn-submit {
-  width: 100%;
-  padding: 12px 0;
-  font-size: 1.1rem;
-  background-color: #6c63ff;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-  font-weight: 700;
-  transition: background-color 0.3s ease, transform 0.15s ease;
-  margin-top: 15px;
-}
-
-.btn-submit:hover {
-  background-color: #574fd6;
-  transform: scale(1.05);
-}
-
-.btn-home {
-  width: 100%;
-  padding: 10px 0;
-  font-size: 1rem;
-  background-color: #aaa;
-  border: none;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-  font-weight: 600;
-  margin-top: 12px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-home:hover {
-  background-color: #888;
-}
-
 /* ===== ข้อความแจ้งเตือน ===== */
 .error-message {
   color: #d9534f;
@@ -223,37 +177,6 @@ button:hover {
   text-align: center;
   margin-bottom: 12px;
   font-weight: 600;
-}
-
-/* ===== ฟอร์ม ===== */
-.form-group {
-  margin-bottom: 18px;
-}
-
-label.w-100 {
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: #2d2d2d;
-  display: block;
-  margin-bottom: 6px;
-}
-
-input.form-control,
-select.form-control {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1.8px solid #ced4da;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-  color: #1e1e1e;
-}
-
-input.form-control:focus,
-select.form-control:focus {
-  border-color: #6c63ff;
-  outline: none;
-  box-shadow: 0 0 6px #a29bfeaa;
 }
 
 /* ===== ตาราง ===== */
@@ -315,10 +238,8 @@ table tbody tr td button {
 table tbody tr td button:hover {
   background-color: #e0a800;
 }
-.title {
-  color: #ffffff;
-}
 
+/* ===== Toggle Switch ===== */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -356,7 +277,6 @@ table tbody tr td button:hover {
   border-radius: 50%;
 }
 
-/* Checked */
 .toggle-switch input:checked + .slider {
   background-color: #4caf50;
 }
@@ -365,11 +285,21 @@ table tbody tr td button:hover {
   transform: translateX(22px);
 }
 
-/* Rounded style */
 .slider.round {
   border-radius: 34px;
 }
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.toggle-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.toggle-switch + span {
+  margin-left: 12px;
 }

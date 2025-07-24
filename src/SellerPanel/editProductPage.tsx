@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { updateProduct,} from "../API/sellerApi";
 import type{ ProductResponse,ProductRequest} from "../API/types";
 
-import "./Seller&edit.css";
+import "./styleSeller_.css";
 
 const EditProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

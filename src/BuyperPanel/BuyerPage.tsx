@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { getProducts,} from "../API/buyerApi";
 import type { ProductResponse,} from "../API/types";
-import "../UserPage.css";
+import "./styleBuyer.css";
 
 const Buyer: React.FC = () => {
   const [query, setQuery] = useState<string>("");

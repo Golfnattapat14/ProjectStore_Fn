@@ -5,7 +5,7 @@ import {
   getProductsSeller,
   deleteProduct,
 } from "../API/sellerApi";
-import "./Seller&edit.css";
+import "./styleSeller_.css";
 
 const SellerPage: React.FC = () => {
   const [query, setQuery] = useState<string>("");
