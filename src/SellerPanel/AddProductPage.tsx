@@ -1,6 +1,8 @@
 import React, { useState, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { type ProductRequest, addNewProduct } from "../StoreApi";
+import { addNewProduct } from "../API/sellerApi";
+import type { ProductRequest } from "../API/types";
+
 import "./Seller&edit.css";
 
 const AddProductPage: React.FC = () => {

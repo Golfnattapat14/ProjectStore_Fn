@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getProducts, type ProductResponse } from "../StoreApi";
+import { getProducts,deleteProduct,deleteUser } from "../API/adminApi";
+import type { ProductResponse } from "../API/types";
 import "../UserPage.css";
 import { signOut } from "../LockRole";
 
@@ -63,11 +64,11 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
+
   return (
     <div>
-      {/* Navbar */}
       <nav className="admin-navbar">
-<h1 className="title">Admin Dashboard</h1>
+        <h1 className="title">Admin Dashboard</h1>
         <div className="search-container">
           <input
             type="text"
@@ -111,7 +112,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <tr key={p.id}>
                 <td>{index + 1}</td>
                 <td>{p.productName}</td>
-                <td>{p.createBy}</td>
+                <td>{p.createdByName}</td>
                 <td>{new Date(p.createDate).toLocaleDateString()}</td>
                 <td>{getProductTypeName(p.productType ?? 0)}</td>
                 <td>{p.productPrice} บาท</td>

@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import type { ProductResponse } from "../StoreApi";
-import { getProductsSeller } from "../StoreApi";
+import type { ProductResponse } from "../API/types";
+import {
+  getProductsSeller,
+  deleteProduct,
+} from "../API/sellerApi";
 import "./Seller&edit.css";
 
 const SellerPage: React.FC = () => {
@@ -12,6 +15,16 @@ const SellerPage: React.FC = () => {
 
   const [, setLoading] = useState<boolean>(false);
   const [, setError] = useState<string>("");
+  const loadProducts = () => {
+    setLoading(true);
+    getProductsSeller()
+      .then((data) => {
+        setProducts(data.filter((p) => p.isActive));
+        setError("");
+      })
+      .catch((err) => setError(err.message || "เกิดข้อผิดพลาด"))
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -52,10 +65,26 @@ const SellerPage: React.FC = () => {
       handleSearchClick();
     }
   };
- const handleSignOut = () => {
+  const handleSignOut = () => {
     localStorage.clear();
     window.location.href = "/login";
   };
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm("คุณแน่ใจว่าจะลบสินค้านี้?");
+    if (!confirmDelete) return;
+
+    try {
+      await deleteProduct(id);
+      loadProducts();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert(String(err));
+      }
+    }
+  };
+
 
   return (
     <div className="seller-page">
@@ -103,14 +132,15 @@ const SellerPage: React.FC = () => {
               <th>ประเภทสินค้า</th>
               <th>ราคา</th>
               <th>จำนวนสินค้า</th>
-              <th>การจัดการ</th>
+              <th>แก้ไขสินค้า</th>
+              <th>ลบสินค้า</th>
             </tr>
           </thead>
           <tbody>
             {products.map((p, index) => {
               const key = p.id ?? `${p.productName}-${index}`;
               return (
-                <tr key={key}>
+                <tr key={key} className={p.isActive ? "" : "inactive"}>
                   <td>{index + 1}</td>
                   <td>{p.productName}</td>
                   <td>{new Date(p.createDate).toLocaleDateString()}</td>
@@ -128,6 +158,14 @@ const SellerPage: React.FC = () => {
                       }}
                     >
                       แก้ไข
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className="delete-button"
+                      onClick={() => p.id && handleDelete(p.id)}
+                    >
+                      ลบ
                     </button>
                   </td>
                 </tr>

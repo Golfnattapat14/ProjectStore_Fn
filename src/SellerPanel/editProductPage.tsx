@@ -1,10 +1,8 @@
 import React, { useState, useEffect, type ChangeEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  type ProductRequest,
-  type ProductResponse,
-  updateProduct,
-} from "../StoreApi";
+import { updateProduct,} from "../API/sellerApi";
+import type{ ProductResponse,ProductRequest} from "../API/types";
+
 import "./Seller&edit.css";
 
 const EditProductPage: React.FC = () => {

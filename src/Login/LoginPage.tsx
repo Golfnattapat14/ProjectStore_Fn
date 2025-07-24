@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { loginUser, type ILoginState } from "../StoreApi";
+import { loginUser,} from "../API/authApi";
+import {type ILoginState } from "../API/types";
+
 import "./Login.css";
 
 const Login: React.FC = () => {

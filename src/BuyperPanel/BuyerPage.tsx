@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, type ChangeEvent } from "react";
-import { getProducts, type ProductResponse } from "../StoreApi";
+import { getProducts,} from "../API/buyerApi";
+import type { ProductResponse,} from "../API/types";
 import "../UserPage.css";
 
 const Buyer: React.FC = () => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../StoreApi";
+import { registerUser } from "../API/authApi";
 import "./Register.css";
 
 type RoleType = "Buyer" | "Seller" | "Admin";

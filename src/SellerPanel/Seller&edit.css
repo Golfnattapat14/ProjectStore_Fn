@@ -431,3 +431,17 @@ td button {
 td button:hover {
   background-color: #e64a19;
 }
+.delete-button {
+  margin-left: 8px;
+  background-color: crimson;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+tr.inactive {
+  opacity: 0.5;       /* ลดความเข้มของแถวให้ดูจาง */
+  color: #999999;     /* สีตัวอักษรให้จางลง */
+  user-select: none;  /* ป้องกันการไฮไลท์ข้อความ */
+}
