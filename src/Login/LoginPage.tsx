@@ -1,18 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { loginUser,} from "../API/authApi";
-import {type ILoginState } from "../API/types";
+import { loginUser } from "../API/authApi";
+import { type ILoginState } from "../API/types";
 
 import "./Login.css";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
-
+  // State or variable
   const [formData, setFormData] = useState<ILoginState>({
     username: "",
     password: "",
   });
 
+  // เมื่อมีการกรอกค่า state จะถูกเปลี่ยนแปลง
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget;
     setFormData((prevState: ILoginState) => ({
@@ -21,6 +22,7 @@ const Login: React.FC = () => {
     }));
   };
 
+  // Logic
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -49,10 +51,11 @@ const Login: React.FC = () => {
     }
   };
 
+  // UI
   return (
     <>
-      <div className="container min-vh-100">
-            <h1>Login</h1>
+      <div className="container min-vh-100 w-100">
+        <h1>Login</h1>
 
         <div className="row min-vh-100 justify-content-center align-items-center">
           <form
@@ -96,7 +99,7 @@ const Login: React.FC = () => {
           </form>
         </div>
       </div>
-     
+
       <br />
     </>
   );
