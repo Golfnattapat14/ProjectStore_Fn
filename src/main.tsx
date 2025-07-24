@@ -15,6 +15,7 @@ import ProtectedRoute from "./LockRole.tsx";
 
 import AddProductPage from "./SellerPanel/AddProductPage.tsx";
 
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>

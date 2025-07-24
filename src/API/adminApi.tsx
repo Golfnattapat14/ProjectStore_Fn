@@ -1,7 +1,8 @@
 import { getAuthHeaders } from "./TokenSetting";
-import type { ProductRequest, ProductResponse } from "./types";
+import type { ProductRequest, ProductResponse, UpdateUserRequest, User, UserResponse } from "./types";
 
 const BASE = "https://localhost:44355/api/";
+
 
 export async function getProducts(): Promise<ProductResponse[]> {
   try {
@@ -14,6 +15,27 @@ export async function getProducts(): Promise<ProductResponse[]> {
     throw err;
   }
 }
+
+export async function getUserById(id: string): Promise<UserResponse> {
+  const headers = getAuthHeaders();
+  const res = await fetch(`${BASE}admin/user/${id}`, {
+    method: "GET",
+    headers,
+  });
+  if (!res.ok) throw new Error("ไม่พบผู้ใช้");
+  return res.json();
+}
+
+
+export async function getUsers(): Promise<User[]> {
+  const res = await fetch(`${BASE}Admin/users`, {
+    method: "GET",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error("โหลดผู้ใช้ล้มเหลว");
+  return await res.json();
+}
+
 export async function createProduct(req: ProductRequest) {
   const res = await fetch(`${BASE}Admin`, {
     method: "POST",
@@ -25,6 +47,14 @@ export async function createProduct(req: ProductRequest) {
   return await res.json();
 }
 
+export async function updateUser(id: string, req: UpdateUserRequest) {
+  const res = await fetch(`${BASE}Admin/${id}`, {
+    method: "PUT",
+    headers: getAuthHeaders(),
+    body: JSON.stringify(req),
+  });
+  if (!res.ok) throw new Error("แก้ไขผู้ใช้ล้มเหลว");
+}
 export async function updateProduct(id: string, req: ProductRequest) {
   const res = await fetch(`${BASE}Admin/${id}`, {
     method: "PUT",
@@ -50,3 +80,4 @@ export async function deleteUser(id: string) {
   });
   if (!res.ok) throw new Error("ลบผู้ใช้ล้มเหลว");
 }
+

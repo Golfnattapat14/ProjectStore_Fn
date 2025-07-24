@@ -1,32 +1,76 @@
 import React, { useState, useEffect } from "react";
-import { getProducts,deleteProduct,deleteUser } from "../API/adminApi";
-import type { ProductResponse } from "../API/types";
+import { getProducts, getUsers } from "../API/adminApi";
+import type { ProductResponse, User } from "../API/types";
 import "../UserPage.css";
 import { signOut } from "../LockRole";
 
-interface AdminDashboardProps {
-  placeholder?: string;
-  onSearch?: (query: string) => void;
-}
-
-const AdminDashboard: React.FC<AdminDashboardProps> = ({
-  placeholder = "ค้นหาสินค้าที่ต้องการ ...",
-  onSearch = () => {},
-}) => {
-  const [query, setQuery] = useState<string>("");
-  const [products, setProducts] = useState<ProductResponse[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+const ManageUsers: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [errorUsers, setErrorUsers] = useState("");
 
   useEffect(() => {
-    setLoading(true);
+    setLoadingUsers(true);
+    getUsers()
+      .then((data) => {
+        setUsers(data);
+        setErrorUsers("");
+      })
+      .catch((err) => setErrorUsers(err.message || "โหลดผู้ใช้ล้มเหลว"))
+      .finally(() => setLoadingUsers(false));
+  }, []);
+
+  if (loadingUsers) return <p>กำลังโหลดข้อมูลผู้ใช้...</p>;
+  if (errorUsers) return <p style={{ color: "red" }}>{errorUsers}</p>;
+
+  return (
+    <div>
+      <h2 className="title">จัดการข้อมูลผู้ใช้</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ลำดับ</th>
+            <th>ชื่อผู้ใช้</th>
+            <th>บทบาท</th>
+            <th>สถานะ</th>
+            <th>จัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((u, i) => (
+            <tr key={u.id}>
+              <td>{i + 1}</td>
+              <td>{u.username}</td>
+              <td>{u.role}</td>
+              <td>{u.isDeleted ? "InActive" : "Active"}</td>
+              <td>
+                <button onClick={() => alert("แก้ไขผู้ใช้ id: " + u.id)}>
+                  แก้ไข
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+const AdminDashboard: React.FC = () => {
+  const [products, setProducts] = useState<ProductResponse[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(false);
+  const [errorProducts, setErrorProducts] = useState("");
+  const [showManageUsers, setShowManageUsers] = useState(false); // state ควบคุมแสดง ManageUsers
+
+  useEffect(() => {
+    setLoadingProducts(true);
     getProducts()
       .then((data) => {
         setProducts(data);
-        setError("");
+        setErrorProducts("");
       })
-      .catch((err) => setError(err.message || "เกิดข้อผิดพลาด"))
-      .finally(() => setLoading(false));
+      .catch((err) => setErrorProducts(err.message || "เกิดข้อผิดพลาด"))
+      .finally(() => setLoadingProducts(false));
   }, []);
 
   const getProductTypeName = (type: number) => {
@@ -44,44 +88,10 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
-  const handleToggleChange = (Id: string) => {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === Id ? { ...p, isActive: !p.isActive } : p))
-    );
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
-
-  const handleSearchClick = () => {
-    onSearch(query);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearchClick();
-    }
-  };
-
-
   return (
     <div>
       <nav className="admin-navbar">
         <h1 className="title">Admin Dashboard</h1>
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder={placeholder}
-            value={query}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            className="search-input"
-          />
-          <button onClick={handleSearchClick} className="search-button">
-            Search
-          </button>
-        </div>
         <div className="signout-container">
           <button onClick={() => signOut()} className="signout-button">
             Sign Out
@@ -89,10 +99,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
       </nav>
 
-      <h3 className="title">ดูข้อมูลทั้งหมด / จัดการระบบ</h3>
-
-      {loading && <p>กำลังโหลดข้อมูล...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <h3 className="title">ข้อมูลสินค้า</h3>
+      {loadingProducts && <p>กำลังโหลดข้อมูลสินค้า...</p>}
+      {errorProducts && <p style={{ color: "red" }}>{errorProducts}</p>}
 
       <div className="table-container">
         <table>
@@ -104,7 +113,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <th>วันที่วางจำหน่าย</th>
               <th>ประเภทสินค้า</th>
               <th>ราคา</th>
-              <th>การจัดการ</th>
             </tr>
           </thead>
           <tbody>
@@ -116,21 +124,19 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 <td>{new Date(p.createDate).toLocaleDateString()}</td>
                 <td>{getProductTypeName(p.productType ?? 0)}</td>
                 <td>{p.productPrice} บาท</td>
-                <td>
-                  <label className="toggle-switch">
-                    <input
-                      type="checkbox"
-                      checked={p.isActive ?? false}
-                      onChange={() => handleToggleChange(p.id)}
-                    />
-                    <span className="slider round"></span>
-                  </label>
-                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <hr style={{ margin: "2rem 0" }} />
+
+      <button onClick={() => setShowManageUsers((prev) => !prev)}>
+        {showManageUsers ? "ซ่อนข้อมูลผู้ใช้" : "จัดการข้อมูล User"}
+      </button>
+
+      {showManageUsers && <ManageUsers />}
     </div>
   );
 };
