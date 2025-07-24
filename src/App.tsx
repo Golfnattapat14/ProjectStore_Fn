@@ -20,11 +20,6 @@ const App: React.FC = () => {
         <Link to="/register" className="btn-link">
           Sign up
         </Link>
-        {/* 
-        <Link to="/admin" className="btn-link">Admin Page</Link>
-        <Link to="/buyer" className="btn-link">Buyer page</Link>
-        <Link to="/seller" className="btn-link">Seller Page</Link> 
-        */}
       </div>
     </div>
   );
