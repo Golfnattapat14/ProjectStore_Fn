@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { getProducts, getUsers } from "../API/adminApi";
-import type { ProductResponse, User } from "../API/types";
+import { getProducts, getUsers, updateUser } from "../API/adminApi";
+import type { ProductResponse, UpdateUserRequest, User } from "../API/types";
 import "../UserPage.css";
 import { signOut } from "../LockRole";
-
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [errorUsers, setErrorUsers] = useState("");
+
 
   useEffect(() => {
     setLoadingUsers(true);
@@ -22,6 +22,25 @@ const ManageUsers: React.FC = () => {
 
   if (loadingUsers) return <p>กำลังโหลดข้อมูลผู้ใช้...</p>;
   if (errorUsers) return <p style={{ color: "red" }}>{errorUsers}</p>;
+
+
+  const handleToggleActive = async (user : User) => {
+    const updated : UpdateUserRequest = {
+      username : user.username,
+      role : user.role,
+      isDeleted : !user.isDeleted
+    };
+    try {
+        await updateUser(user.id, updated);
+        setUsers((prev)=>
+        prev.map((u) => (u.id === user.id ? { ...u, isDeleted: !u.isDeleted } : u))
+      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
+      alert("ไม่สามารถอัปเดตสถานะได้");
+    }
+  };
+
 
   return (
     <div>
@@ -42,11 +61,18 @@ const ManageUsers: React.FC = () => {
               <td>{i + 1}</td>
               <td>{u.username}</td>
               <td>{u.role}</td>
-              <td>{u.isDeleted ? "InActive" : "Active"}</td>
               <td>
-                <button onClick={() => alert("แก้ไขผู้ใช้ id: " + u.id)}>
-                  แก้ไข
-                </button>
+                <label className="switch">
+                  <input 
+                  type="checkbox"
+                  checked={!u.isDeleted}
+                  onChange={() => handleToggleActive(u)} />
+                  
+                </label>
+              </td>
+              <td>
+                <button onClick={() => alert("แก้ไขผู้ใช้ id:"+ u.id)}>แก้ไข</button>
+                
               </td>
             </tr>
           ))}
@@ -60,7 +86,7 @@ const AdminDashboard: React.FC = () => {
   const [products, setProducts] = useState<ProductResponse[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [errorProducts, setErrorProducts] = useState("");
-  const [showManageUsers, setShowManageUsers] = useState(false); // state ควบคุมแสดง ManageUsers
+  const [showManageUsers, setShowManageUsers] = useState(false);
 
   useEffect(() => {
     setLoadingProducts(true);
@@ -113,6 +139,7 @@ const AdminDashboard: React.FC = () => {
               <th>วันที่วางจำหน่าย</th>
               <th>ประเภทสินค้า</th>
               <th>ราคา</th>
+              <th>แก้ไขสินค้า</th>
             </tr>
           </thead>
           <tbody>
@@ -124,6 +151,7 @@ const AdminDashboard: React.FC = () => {
                 <td>{new Date(p.createDate).toLocaleDateString()}</td>
                 <td>{getProductTypeName(p.productType ?? 0)}</td>
                 <td>{p.productPrice} บาท</td>
+                <td><button>แก้ไขสินค้า : {p.productName}</button></td>
               </tr>
             ))}
           </tbody>

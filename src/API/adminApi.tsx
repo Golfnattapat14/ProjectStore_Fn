@@ -48,7 +48,7 @@ export async function createProduct(req: ProductRequest) {
 }
 
 export async function updateUser(id: string, req: UpdateUserRequest) {
-  const res = await fetch(`${BASE}Admin/${id}`, {
+  const res = await fetch(`${BASE}Admin/manage/${id}`, {
     method: "PUT",
     headers: getAuthHeaders(),
     body: JSON.stringify(req),
