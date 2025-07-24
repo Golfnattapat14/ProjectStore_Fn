@@ -66,7 +66,7 @@ export async function updateProduct(id: string, req: ProductRequest) {
 }
 
 export async function deleteProduct(id: string) {
-  const res = await fetch(`${BASE}Admin/${id}`, {
+  const res = await fetch(`${BASE}Admin/Products/${id}`, {
     method: "DELETE",
     headers: getAuthHeaders(),
   });

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { deleteUser, getProducts, getUsers, updateUser } from "../API/adminApi";
+import {
+  deleteUser,
+  getProducts,
+  getUsers,
+  updateUser,
+  deleteProduct,
+} from "../API/adminApi";
 import type { ProductResponse, UpdateUserRequest, User } from "../API/types";
 import "./styleAdmin.css";
 import { signOut } from "../LockRole";
@@ -73,7 +79,13 @@ const ManageUsers: React.FC = () => {
         </thead>
         <tbody>
           {users.map((u, i) => (
-            <tr key={u.id}>
+            <tr
+              key={u.id}
+              style={{
+                backgroundColor: !u.isDeleted ? "#f0f0f0" : "transparent",
+                opacity: !u.isDeleted ? 0.6 : 1,
+              }}
+            >
               <td>{i + 1}</td>
               <td>{u.username}</td>
               <td>{u.role}</td>
@@ -101,10 +113,12 @@ const ManageUsers: React.FC = () => {
                 <button onClick={() => alert("แก้ไขผู้ใช้ id:" + u.id)}>
                   แก้ไข
                 </button>
-                <button 
-                className="delete-button"
-                onClick={() => handleDeleteUsers(u.id)}
-                >ลบผู้ใช้นี้</button>
+                <button
+                  className="delete-button"
+                  onClick={() => handleDeleteUsers(u.id)}
+                >
+                  ลบผู้ใช้นี้
+                </button>
               </td>
             </tr>
           ))}
@@ -119,6 +133,18 @@ const AdminDashboard: React.FC = () => {
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [errorProducts, setErrorProducts] = useState("");
   const [showManageUsers, setShowManageUsers] = useState(false);
+  const fetchProducts = async () => {
+    try {
+      setLoadingProducts(true);
+      const data = await getProducts();
+      setProducts(data);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setErrorProducts(err.message || "เกิดข้อผิดพลาด");
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
 
   useEffect(() => {
     setLoadingProducts(true);
@@ -143,6 +169,22 @@ const AdminDashboard: React.FC = () => {
         return "ของเล่น";
       default:
         return "อื่น ๆ";
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm("คุณแน่ใจว่าจะลบสินค้านี้?");
+    if (!confirmDelete) return;
+
+    try {
+      await deleteProduct(id);
+      await fetchProducts();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert(String(err));
+      }
     }
   };
 
@@ -171,20 +213,41 @@ const AdminDashboard: React.FC = () => {
               <th>วันที่วางจำหน่าย</th>
               <th>ประเภทสินค้า</th>
               <th>ราคา</th>
+              <th>สถานะสินค้า</th>
               <th>แก้ไขสินค้า</th>
             </tr>
           </thead>
           <tbody>
             {products.map((p, index) => (
-              <tr key={p.id}>
+              <tr
+                key={p.id}
+                style={{
+                  backgroundColor: !p.isActive ? "#f0f0f0" : "transparent",
+                  opacity: !p.isActive ? 0.6 : 1,
+                }}
+              >
                 <td>{index + 1}</td>
                 <td>{p.productName}</td>
                 <td>{p.createdByName}</td>
                 <td>{new Date(p.createDate).toLocaleDateString()}</td>
                 <td>{getProductTypeName(p.productType ?? 0)}</td>
                 <td>{p.productPrice} บาท</td>
+                <td
+                  style={{
+                    fontWeight: 600,
+                    color: p.isActive ? "#28a745" : "#dc3545",
+                  }}
+                >
+                  {p.isActive ? "เปิดใช้งาน" : "ปิดใช้งาน"}
+                </td>
                 <td>
-                  <button>แก้ไขสินค้า : {p.productName}</button>
+                  <button>แก้ไขสินค้า</button>
+                  <button
+                    className="delete-button"
+                    onClick={() => handleDelete(p.id)}
+                  >
+                    ลบสินค้าชิ้นนี้
+                  </button>
                 </td>
               </tr>
             ))}
